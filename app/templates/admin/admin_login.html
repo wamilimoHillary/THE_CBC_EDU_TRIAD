@@ -1,0 +1,41 @@
+{% extends "main/base.html" %}
+
+{% block title %}Admin Login - CBC-EDU Triad{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="admin_main">
+    <div class="form-container">
+
+        <!-- Display Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% endwith %}
+
+        <h2>Admin Login</h2>
+        <form action="{{ url_for('auth.admin_login') }}" method="post">
+            <div class="input-group">
+                <input type="text" id="email" name="email" placeholder="Enter your Email" required>
+                <label for="email">*Email</label>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" name="password" placeholder="Enter your Password" required>
+                <label for="password">*Password</label>
+            </div>
+            <button type="submit" class="form-button">
+                Login <i class="fas fa-sign-in-alt"></i>
+            </button>
+        </form>
+        <p>Forgot your password? <a href="{{ url_for('auth.admin_request_reset') }}" class="forgotten-password"> <i class="fa fa-arrow-right"></i>Reset Password</a></p>
+    </div>
+</main>
+{% endblock %}

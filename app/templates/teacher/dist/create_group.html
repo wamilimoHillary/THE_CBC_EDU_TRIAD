@@ -1,0 +1,106 @@
+{% extends "teacher/teacher_base.html" %}
+
+{% block teacher_content %}
+<div class="container">
+    <div class="dashboard-header">
+        <h2><i class="fas fa-users"></i> Manage Student Groups</h2>
+    </div>
+
+    <!-- Create Group Form -->
+    <div class="card form-card">
+        <div class="card-body">
+            <form method="POST">
+                <div class="form-group">
+                    <label for="group_name">Group Name</label>
+                    <input type="text" class="form-control" id="group_name" 
+                           name="group_name" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Select Members</label>
+                    <div class="student-list">
+                        {% for student in students %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" 
+                                   id="student_{{ student[0] }}" 
+                                   name="student_ids" value="{{ student[0] }}">
+                            <label class="form-check-label" for="student_{{ student[0] }}">
+                                {{ student[2] }}, {{ student[1] }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Create Group
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Existing Groups -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h3>Your Groups</h3>
+        </div>
+        <div class="card-body">
+            {% if not groups %}
+                <div class="alert alert-info">
+                    No groups created yet
+                </div>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Group Name</th>
+                                <th>Members</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for group in groups %}
+                            <tr>
+                                <td>{{ group[1] }}</td>
+                                <td>{{ group[2] }}</td>
+                                <td>
+                                    <a href="{{ url_for('teacher.view_group', group_id=group[0]) }}" 
+                                       class="btn btn-sm btn-info">
+                                       <i class="fas fa-eye"></i> View
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-card {
+        margin-bottom: 2rem;
+        border-left: 4px solid #3498db;
+    }
+    
+    .student-list {
+        max-height: 300px;
+        overflow-y: auto;
+        padding: 10px;
+        border: 1px solid #eee;
+        border-radius: 4px;
+    }
+    
+    .form-check {
+        padding: 8px;
+        border-bottom: 1px solid #f5f5f5;
+    }
+    
+    .form-check:hover {
+        background-color: #f8f9fa;
+    }
+</style>
+{% endblock %}

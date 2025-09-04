@@ -1,0 +1,40 @@
+{% extends "student_base.html" %}
+
+{% block title %}Progress Charts - CBC-EDU Triad{% endblock %}
+
+{% block content %}
+<div class="charts-container">
+    <h2>Your Progress Charts</h2>
+    <div class="chart">
+        <h3>Competency Progress</h3>
+        <p><strong>Science:</strong> 85%</p>
+        <p><strong>Mathematics:</strong> 78%</p>
+        <p><strong>History:</strong> 92%</p>
+    </div>
+    <div class="chart">
+        <h3>Project Completion</h3>
+        <p><strong>Completed:</strong> 5</p>
+        <p><strong>Pending:</strong> 2</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .charts-container {
+        padding: 20px;
+    }
+
+    .chart {
+        background: var(--bg-primary);
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        color: var(--text-secondary);
+    }
+</style>
+{% endblock %}

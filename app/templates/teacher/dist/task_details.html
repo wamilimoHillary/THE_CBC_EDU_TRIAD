@@ -1,0 +1,84 @@
+{% extends "teacher/teacher_base.html" %}
+
+{% block title %}Task Details{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Task Details</h2>
+        <a href="{{ url_for('teacher.create_task_view') }}" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i> Create New Task
+        </a>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h3>{{ task.task.title }}</h3>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <p><strong>Description:</strong></p>
+                    <p>{{ task.task.description }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Due Date:</strong> {{ task.task.duedate.strftime('%B %d, %Y') }}</p>
+                    <p><strong>Class:</strong> {{ task.task.classname }}</p>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <h5>Competencies Assessed</h5>
+                <ul>
+                    {% for comp in task.competencies %}
+                    <li>{{ comp.competencyname }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            
+            {% if task.students %}
+            <div class="mb-3">
+                <h5>Assigned Students</h5>
+                <div class="row">
+                    {% for student in task.students %}
+                    <div class="col-md-4 mb-2">
+                        <div class="card">
+                            <div class="card-body p-2">
+                                <i class="fas fa-user me-2"></i>
+                                {{ student.firstname }} {{ student.lastname }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if task.resources %}
+            <div class="mb-3">
+                <h5>Attached Resources</h5>
+                <div class="list-group">
+                    {% for resource in task.resources %}
+                    <a href="{{ url_for('static', filename=resource.filepath) }}" 
+                       class="list-group-item list-group-item-action" 
+                       target="_blank">
+                        <i class="fas fa-file-{{ 'pdf' if resource.filetype == 'pdf' else 'word' if resource.filetype in ['doc', 'docx'] else 'excel' if resource.filetype in ['xls', 'xlsx'] else 'image' if resource.filetype in ['jpg', 'jpeg', 'png', 'gif'] else 'alt' }} me-2"></i>
+                        {{ resource.filename }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="card-footer text-muted">
+            Created on {{ task.task.createdat.strftime('%B %d, %Y at %H:%M') }}
+        </div>
+    </div>
+    
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <a href="{{ url_for('teacher.teachers_dashboard') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}

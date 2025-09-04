@@ -1,0 +1,276 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Manage Classes - CBC-EDU Triad{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_manage.css') }}">
+{% endblock %}
+
+{% block admin_content %}
+<div class="manage-users">
+        <!-- Display Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+
+
+    <h2>Manage Classes</h2>
+    <a href="#" class="btn-add" data-modal="add-class-modal"><i class="fas fa-plus"></i> Add Class</a>
+
+
+    <div class="search-container">
+        <form action="" method="GET" class="search-wrapper">
+            <input type="text" id="search-input" name="query" placeholder="Search Classes..." value="">
+            <button type="submit" id="search-button"><i class="fas fa-search"></i></button>
+        </form>
+    </div>
+
+    <table class="users-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Class Name</th>
+                <th>Academic Year</th>
+                <th>Teacher</th>
+                <th>Created At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for class in classes %}
+            <tr>
+                <td>{{ class[0] }}</td>  <!-- classid -->
+                <td>{{ class[1] }}</td>  <!-- classname -->
+                <td>{{ class[2] }}</td>  <!-- academicyear -->
+                <td>{{ class[5] }} {{ class[6] }}</td>  <!-- teacher firstname + lastname -->
+                <td>{{ class[3].strftime('%Y-%m-%d %H:%M') if class[3] else '' }}</td>  <!-- createdat -->
+                <td>
+                    <a href="{{ url_for('admin.manage_class_students', class_id=class[0]) }}" 
+                       class="btn-students">
+                       <i class="fas fa-plus"></i> Add Students to class
+                    </a>
+                    <a href="#" class="btn-edit" data-class-id="{{ class[0] }}">Edit</a>
+                    <a href="#" class="btn-delete" data-class-id="{{ class[0] }}">Delete</a>
+                </td>
+                 
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" class="text-center">No classes found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Add Class Modal -->
+    <div id="add-class-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Add Class</h2>
+            <form id="add-class-form" action="{{ url_for('admin.add_class') }}" method="POST" class="auth-form">
+                <div class="input-group">
+                    <input type="text" id="class-name" name="class_name" placeholder=" " required>
+                    <label for="class-name">Class Name</label>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="academic-year" name="academic_year" placeholder=" " required>
+                    <label for="academic-year">Academic Year</label>
+                </div>
+                <div class="input-group"> <br> <br>
+                    <select id="teacher-id" name="teacher_id" required>
+                        <option value="">Select Teacher</option>
+                        {% for teacher in teachers %}
+                        <option value="{{ teacher[0] }}">{{ teacher[1] }} {{ teacher[2] }}</option>
+                        {% endfor %}
+                    </select>  
+                    <label for="teacher-id">Teacher</label>
+                </div>
+                <button type="submit" class="form-button"><i class="fas fa-plus"></i> Add Class</button>
+            </form>
+        </div>
+    </div>
+
+<!-- Add these modals after the Add Class modal -->
+
+<!-- Edit Class Modal -->
+<div id="edit-class-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Edit Class</h2>
+        <form id="edit-class-form" action="{{ url_for('admin.edit_class') }}" method="POST" class="auth-form">
+            <input type="hidden" id="edit-class-id" name="class_id">
+            <div class="input-group">
+                <input type="text" id="edit-class-name" name="class_name" placeholder=" " required>
+                <label for="edit-class-name">Class Name</label>
+            </div>
+            <div class="input-group">
+                <input type="text" id="edit-academic-year" name="academic_year" placeholder=" " required>
+                <label for="edit-academic-year">Academic Year</label>
+            </div>
+            <div class="input-group"> <br> <br>
+                <select id="edit-teacher-id" name="teacher_id" required>
+                    {% for teacher in teachers %}
+                    <option value="{{ teacher[0] }}">{{ teacher[1] }} {{ teacher[2] }}</option>
+                    {% endfor %}
+                </select>
+                <label for="edit-teacher-id">Teacher</label>
+            </div>
+            <button type="submit" class="form-button"><i class="fas fa-save"></i> Save Changes</button>
+        </form>
+    </div>
+</div>
+
+<!-- Delete Class Modal -->
+<div id="delete-class-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Delete Class</h2>
+        <p>Are you sure you want to delete this class?</p>
+        <form id="delete-class-form" action="{{ url_for('admin.delete_class') }}" method="POST">
+            <input type="hidden" id="delete-class-id" name="class_id">
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel">Cancel</button>
+                <button type="submit" class="btn-confirm-delete">Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+    <div id="overlay"></div>
+</div>
+
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+
+<script>
+    // static/js/admin_classes.js
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Modal elements
+    const addModal = document.getElementById('add-class-modal');
+    const editModal = document.getElementById('edit-class-modal');
+    const deleteModal = document.getElementById('delete-class-modal');
+    const overlay = document.getElementById('overlay');
+    
+    // Form elements
+    const addForm = document.getElementById('add-class-form');
+    const editForm = document.getElementById('edit-class-form');
+    const deleteForm = document.getElementById('delete-class-form');
+    
+    // Button elements
+    const addButton = document.querySelector('.btn-add');
+    const editButtons = document.querySelectorAll('.btn-edit');
+    const deleteButtons = document.querySelectorAll('.btn-delete');
+    const closeButtons = document.querySelectorAll('.close-modal, .btn-cancel');
+
+    // Initialize modals
+    function initModals() {
+        // Show add modal
+        if (addButton && addModal) {
+            addButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                addModal.style.display = 'block';
+                overlay.style.display = 'block';
+            });
+        }
+
+        // Show edit modal and fetch data
+        editButtons.forEach(button => {
+            button.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const classId = button.getAttribute('data-class-id');
+                
+                try {
+                    // Show loading state
+                    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+                    
+                    const response = await fetch(`/admin/get_class/${classId}`);
+                    const classData = await response.json();
+                    
+                    if (classData.error) {
+                        alert(classData.error);
+                        return;
+                    }
+                    
+                    // Populate form
+                    document.getElementById('edit-class-id').value = classData.classid;
+                    document.getElementById('edit-class-name').value = classData.classname;
+                    document.getElementById('edit-academic-year').value = classData.academicyear;
+                    document.getElementById('edit-teacher-id').value = classData.teacherid;
+                    
+                    // Show modal
+                    editModal.style.display = 'block';
+                    overlay.style.display = 'block';
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Failed to load class details');
+                } finally {
+                    button.innerHTML = 'Edit';
+                }
+            });
+        });
+
+        // Show delete modal
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const classId = button.getAttribute('data-class-id');
+                document.getElementById('delete-class-id').value = classId;
+                deleteModal.style.display = 'block';
+                overlay.style.display = 'block';
+            });
+        });
+
+        // Close modals
+        closeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                addModal.style.display = 'none';
+                editModal.style.display = 'none';
+                deleteModal.style.display = 'none';
+                overlay.style.display = 'none';
+            });
+        });
+
+        // Close when clicking overlay
+        overlay.addEventListener('click', () => {
+            addModal.style.display = 'none';
+            editModal.style.display = 'none';
+            deleteModal.style.display = 'none';
+            overlay.style.display = 'none';
+        });
+
+        // Form validation
+        if (addForm) {
+            addForm.addEventListener('submit', function(e) {
+                if (!this.checkValidity()) {
+                    e.preventDefault();
+                    this.classList.add('was-validated');
+                }
+            });
+        }
+
+        if (editForm) {
+            editForm.addEventListener('submit', function(e) {
+                if (!this.checkValidity()) {
+                    e.preventDefault();
+                    this.classList.add('was-validated');
+                }
+            });
+        }
+    }
+
+    // Initialize everything
+    initModals();
+});
+</script>
+
+{% endblock %}

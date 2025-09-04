@@ -1,0 +1,143 @@
+{% extends "teacher/teacher_base.html" %}
+
+{% block teacher_content %}
+<div class="classes-container">
+    <!-- Header -->
+    <section class="classes-header">
+        <h2><i class="fas fa-users-class"></i> My Classes</h2>
+        <p class="current-date">{{ current_date }}</p>
+    </section>
+
+    <!-- Classes List -->
+    <div class="classes-list">
+        {% if not classes %}
+            <div class="empty-state">
+                <i class="fas fa-users-slash"></i>
+                <h3>No Classes Assigned</h3>
+                <p>You don't have any active classes currently.</p>
+            </div>
+        {% else %}
+            {% for class in classes %}
+            <div class="class-card">
+                <div class="class-info">
+                    <h3>{{ class[1] }}</h3>
+                    <span class="student-count">
+                        <i class="fas fa-users"></i> {{ class[2] }} students
+                    </span>
+                </div>
+                <div class="class-actions">
+                    <a href="{{ url_for('teacher.class_details', class_id=class[0]) }}" 
+                       class="btn btn-view">
+                       <i class="fas fa-eye"></i> View Details
+                    </a>
+                    <a href="{{ url_for('teacher.manage_tasks') }}?class_id={{ class[0] }}" 
+                       class="btn btn-assign">
+                       <i class="fas fa-tasks"></i> Assign Task
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .classes-container {
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .classes-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .classes-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 20px;
+    }
+
+    .class-card {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .class-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    .class-info {
+        margin-bottom: 15px;
+    }
+
+    .class-info h3 {
+        margin: 0 0 10px 0;
+        color: #2c3e50;
+    }
+
+    .student-count {
+        display: inline-block;
+        background: #f8f9fa;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        color: #7f8c8d;
+    }
+
+    .class-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn {
+        padding: 8px 15px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+    }
+
+    .btn-view {
+        background: #3498db;
+        color: white;
+    }
+
+    .btn-view:hover {
+        background: #2980b9;
+    }
+
+    .btn-assign {
+        background: #2ecc71;
+        color: white;
+    }
+
+    .btn-assign:hover {
+        background: #27ae60;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 40px;
+        grid-column: 1 / -1;
+    }
+
+    .empty-state i {
+        font-size: 3rem;
+        color: #bdc3c7;
+        margin-bottom: 15px;
+    }
+
+    .empty-state h3 {
+        color: #7f8c8d;
+        margin-bottom: 10px;
+    }
+</style>
+{% endblock %}

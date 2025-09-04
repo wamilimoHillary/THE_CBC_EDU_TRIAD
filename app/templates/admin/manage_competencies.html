@@ -1,0 +1,198 @@
+<!-- templates/admin/manage_competencies.html -->
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Manage Competencies - CBC-EDU Triad{% endblock %}
+{% block styles %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+<!-- Custom CSS  for admin pages in sidebar-->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_manage.css') }}">
+{% endblock %}
+
+{% block admin_content %}
+<div class="manage-users">
+ <!-- Display Flash Messages -->
+ {% with messages = get_flashed_messages(with_categories=true) %}
+ {% if messages %}
+     <div class="flash-messages">
+         {% for category, message in messages %}
+             <div class="flash {{ category }}">{{ message }}</div>
+         {% endfor %}
+     </div>
+ {% endif %}
+ {% endwith %}
+
+    <h2>Manage Competencies</h2>
+    <a href="#" class="btn-add" data-modal="add-competency-modal"><i class="fas fa-plus"></i> Add Competency</a>
+
+  <!-- Search Container -->
+  <div class="search-container">
+    <form action="" method="GET" class="search-wrapper">
+        <input type="text" id="search-input" name="query" placeholder="Search Competencies..." value="">
+        <button type="submit" id="search-button"><i class="fas fa-search"></i></button>
+    </form>
+    
+  
+</div>
+
+    <!-- Competencies Table -->
+    <table class="users-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for competency in competencies %}
+            <tr>
+                <td>{{ competency[0] }}</td> <!-- CompetencyID -->
+                <td>{{ competency[1] }}</td> <!-- CompetencyName -->
+                <td>{{ competency[2] }}</td> <!-- CompetencyDescription -->
+                <td>
+                    <a href="#" class="btn-edit" data-modal="edit-competency-modal" data-competency-id="{{ competency[0] }}">Edit</a>
+                    <a href="#" class="btn-delete" data-modal="delete-competency-modal" data-competency-id="{{ competency[0] }}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    
+   <!-- Add Competency Modal -->
+<div id="add-competency-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Add Competency</h2>
+        <form id="add-competency-form" action="{{ url_for('admin.add_competency') }}" method="POST" class="auth-form">
+            <div class="input-group">
+                <input type="text" id="competency-name" name="competency-name" placeholder=" " required>
+                <label for="competency-name">Name</label>
+            </div>
+            <div class="input-group">
+                <textarea id="competency-description" name="competency-description" placeholder=" " required></textarea>
+                <label for="competency-description">Description</label>
+            </div>
+            <button type="submit" class="form-button"><i class="fas fa-plus"></i> Add Competency</button>
+        </form>
+    </div>
+</div>
+
+
+<!-- Edit Competency Modal -->
+<div id="edit-competency-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Edit Competency</h2>
+        <form id="edit-competency-form" action="{{ url_for('admin.edit_competency') }}" method="POST" class="auth-form">
+            <input type="hidden" id="edit-competency-id" name="competency_id">
+            <div class="input-group">
+                <input type="text" id="edit-competency-name" name="competency-name" placeholder=" " required>
+                <label for="edit-competency-name">Name</label>
+            </div>
+            <div class="input-group">
+                <textarea id="edit-competency-description" name="competency-description" placeholder=" " required></textarea>
+                <label for="edit-competency-description">Description</label>
+            </div>
+            <button type="submit" class="form-button"><i class="fas fa-save"></i> Save Changes</button>
+        </form>
+    </div>
+</div>
+
+
+<!-- Delete Competency Modal -->
+<div id="delete-competency-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Delete Competency</h2>
+        <p>Are you sure you want to delete this competency?</p>
+        <form id="delete-competency-form" action="{{ url_for('admin.delete_competency') }}" method="POST">
+            <input type="hidden" id="delete-competency-id" name="competency_id">
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel">Cancel</button>
+                <button type="submit" class="btn-confirm-delete">Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+    <!-- Overlay -->
+    <div id="overlay"></div>
+</div>
+<!-- Include the modal.js file -->
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+<Script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const overlay = document.getElementById('overlay');
+
+    // Add event listeners for Edit buttons
+    const editButtons = document.querySelectorAll('.btn-edit');
+    editButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            const modalId = button.getAttribute('data-modal');
+            const modal = document.getElementById(modalId);
+
+            if (modal) {
+                const competencyId = button.getAttribute('data-competency-id');
+                fetchCompetencyDetails(competencyId, modal);
+                modal.style.display = 'block';
+                overlay.style.display = 'block';
+            }
+        });
+    });
+
+    // Add event listeners for Delete buttons
+    const deleteButtons = document.querySelectorAll('.btn-delete');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            const modalId = button.getAttribute('data-modal');
+            const modal = document.getElementById(modalId);
+
+            if (modal) {
+                const competencyId = button.getAttribute('data-competency-id');
+                document.getElementById('delete-competency-id').value = competencyId;
+                modal.style.display = 'block';
+                overlay.style.display = 'block';
+            }
+        });
+    });
+
+    // Close modal when Cancel button is clicked
+    const cancelButtons = document.querySelectorAll('.btn-cancel');
+    cancelButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const modal = button.closest('.modal');
+            if (modal) {
+                modal.style.display = 'none';
+                overlay.style.display = 'none';
+            }
+        });
+    });
+
+    // Function to fetch competency details for editing
+    function fetchCompetencyDetails(competencyId, modal) {
+        fetch(`/admin/get_competency/${competencyId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error(data.error);
+                    return;
+                }
+
+                // Populate the form fields with the fetched data
+                document.getElementById('edit-competency-id').value = data.CompetencyID;
+                document.getElementById('edit-competency-name').value = data.CompetencyName;
+                document.getElementById('edit-competency-description').value = data.CompetencyDescription;
+            })
+            .catch(error => console.error('Error fetching competency details:', error));
+    }
+});
+</Script>
+{% endblock %}

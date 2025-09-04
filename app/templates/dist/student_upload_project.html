@@ -1,0 +1,65 @@
+{% extends "student_base.html" %}
+
+{% block title %}Upload Project - CBC-EDU Triad{% endblock %}
+
+{% block content %}
+<div class="upload-container">
+    <h2>Upload Project</h2>
+    <form id="upload-form" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="project-title">Project Title</label>
+            <input type="text" id="project-title" name="project-title" required>
+        </div>
+        <div class="form-group">
+            <label for="project-description">Project Description</label>
+            <textarea id="project-description" name="project-description" rows="4" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="project-file">Upload Project File</label>
+            <input type="file" id="project-file" name="project-file" accept=".pdf,.doc,.docx,.zip" required>
+        </div>
+        <button type="submit" class="btn-upload">Upload Project</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .upload-container {
+        padding: 20px;
+        background: var(--bg-primary);
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .form-group input, .form-group textarea, .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+    }
+
+    .btn-upload {
+        background-color: var(--primary-color);
+        color: var(--text-light);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .btn-upload:hover {
+        background-color: var(--accent-color);
+    }
+</style>
+{% endblock %}

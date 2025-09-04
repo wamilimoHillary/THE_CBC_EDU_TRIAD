@@ -1,0 +1,324 @@
+
+
+.modal {
+    display: none;
+    position: fixed;
+    width: 30%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--bg-gradient);
+    padding: 20px;
+    padding-right: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 3rem;
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--text-primary);
+}
+
+.close-modal:hover {
+    color:var(--text-primary);
+}
+
+#overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.836);
+    z-index: 999;
+}
+
+
+
+
+.search-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 15px 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.contain-head{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+
+}
+
+.search-wrapper {
+    display: flex;
+    align-items: center;
+    background:#fff;
+    border-radius: 28px;
+    padding:0;
+    border: 1px solid #e2e8f0;
+    box-shadow: 1px 1px 3px 2px var(--bg-secondary);
+}
+
+.search-icon {
+    margin-right: 10px;
+    color: #64748b;
+    font-size: 16px;
+}
+
+#search-input {
+    flex-grow: 1;
+    padding: 12px 15px;
+    border: none;
+    background: transparent;
+    font-size: 15px;
+    color: #334155;
+    outline: none;
+}
+
+#search-input::placeholder {
+    color: #94a3b8;
+}
+
+#search-button {
+    background: var(--bg-secondary);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 0 28px 28px 0; 
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+}
+
+#search-button:hover {
+    background-color: #2563eb;
+}
+
+.search-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filter-group label {
+    font-size: 14px;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.filter-group select,
+.filter-group input {
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #cbd5e1;
+    background-color: #f8fafc;
+    color: #475569;
+    font-size: 14px;
+    min-width: 130px;
+    outline: none;
+}
+
+.filter-group select:focus,
+.filter-group input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+#advanced-search-toggle {
+    margin-left: auto;
+    background-color: transparent;
+    color: #3b82f6;
+    border: 1px solid #3b82f6;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+#advanced-search-toggle:hover {
+    background-color: #eff6ff;
+}
+
+.advanced-filters {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .search-filters {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .filter-group {
+        width: 100%;
+    }
+
+    #advanced-search-toggle {
+        margin-left: 0;
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    .advanced-filters {
+        flex-direction: column;
+    }
+}
+
+
+    
+/* Minimal CSS for the table and buttons manage usesr*/
+.manage-users {
+    padding: 20px;  
+   margin: auto;
+   width: 95%;
+ 
+}
+
+.btn-add {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #4CAF50; /* Green */
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    margin-bottom: 20px;
+}
+
+.btn-add:hover {
+    background-color: #45a049;
+}
+/* Make Table Responsive */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto; /* Enables horizontal scrolling */
+}
+
+/* Minimal CSS for the table and buttons */
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    min-width: 400px; /* Ensures table does not shrink too much */
+}
+
+.users-table th, .users-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--bg-secondary);
+    white-space: nowrap; /* Prevents text from wrapping */
+}
+
+.users-table th {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.users-table tr:hover {
+    background-color: #f5f5f5;
+}
+
+.btn-edit, .btn-delete,.btn-students {
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 3px;
+    font-size: 14px;
+}
+
+.btn-edit {
+    background-color: #2196F3; /* Blue */
+    color: white;
+    margin-right: 5px;
+}
+
+.btn-edit:hover {
+    background-color: #0b7dda;
+}
+
+.btn-delete {
+    background-color: #f44336; /* Red */
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #da190b;
+}
+
+.btn-students{
+   margin-right: 3px;
+    background: #3d8f41;
+    color: #fff;
+}
+
+/* Media query for small screens */
+@media (max-width: 768px) {
+
+    .manage-users {
+      position: absolute;
+       width: 90%;     
+    }
+    .addteacher_search_container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .btn-add {
+        margin-bottom: 10px;
+        align-self: flex-start;
+    }
+    
+    .searchbar {
+        width: 100%; /* 100% width on small screens */
+        margin-bottom: 10px;
+    }
+
+    .modal {
+        position: fixed;
+        width: 70%;
+        margin:15px;
+        top: 50%;
+    }
+    
+}
+
+
+@media screen and (max-width: 328px) {
+    .modal {
+        position: fixed;
+        width: 70%;
+        margin:10px;
+        top: 50%;
+    }
+}

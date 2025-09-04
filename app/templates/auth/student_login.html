@@ -1,0 +1,45 @@
+<!-- templates/auth/student_login.html -->
+{% extends "main/base.html" %}
+
+{% block title %}Student Login - CBC-EDU Triad{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="teacher_main">
+    <div class="form-container">
+
+        <!-- Display Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+
+        <h2>Student Log In</h2>
+        <form action="{{ url_for('auth.student_login') }}" method="post">
+            <div class="input-group">
+                <input type="text" id="email_or_student_number" name="email_or_student_number" placeholder="Enter your Email or Student Number" required>
+                <label for="email_or_student_number">*Email or Student Number</label>
+            </div>
+            
+            <div class="input-group">
+                <input type="password" id="password" name="password" placeholder="Enter password min 4 & max 8 characters" required>
+                <label for="password">*Password</label>
+            </div>
+           
+            <button type="submit" class="form-button">
+                Login <i class="fas fa-sign-in-alt"></i> 
+            </button>
+        </form>
+        <a href="" class="forgot-password"> <i class="fa fa-key"></i>Forgot password?</a>
+           
+    </div>
+</main>
+{% endblock %}

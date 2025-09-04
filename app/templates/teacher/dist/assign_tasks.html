@@ -1,0 +1,62 @@
+{% extends "teacher/teachers_base.html" %}
+
+{% block title %}Assign Tasks - CBC-EDU Triad{% endblock %}
+
+{% block content %}
+<div class="tasks-container">
+    <h2>Assign Tasks</h2>
+    <form id="assign-task-form">
+        <div class="form-group">
+            <label for="task-title">Task Title</label>
+            <input type="text" id="task-title" name="task-title" required>
+        </div>
+        <div class="form-group">
+            <label for="task-description">Task Description</label>
+            <textarea id="task-description" name="task-description" rows="4" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="due-date">Due Date</label>
+            <input type="date" id="due-date" name="due-date" required>
+        </div>
+        <button type="submit" class="btn-assign">Assign Task</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .tasks-container {
+        padding: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .form-group input, .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .btn-assign {
+        background-color: #004d4d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .btn-assign:hover {
+        background-color: #ff7f00;
+    }
+</style>
+{% endblock %}

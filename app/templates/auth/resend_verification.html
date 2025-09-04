@@ -1,0 +1,36 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Resend Verification - CBC-EDU Triad{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='colors.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="parent_main">
+    <div class="form-container">
+        <!-- Display Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}  
+
+        <h4>Quickly verify you Email</h4>
+
+        <form method="POST" action="{{ url_for('auth.resend_verification') }}">
+                
+                <div class="input-group">
+                    <input type="email" id="email" name="email" placeholder="Enter a valid and active Email" required>
+                    <label for="email">*Email</label>
+                </div>
+            <button type="submit" class="form-button">Resend Verification Email</button>
+        </form>
+    </div>
+</main>
+{% endblock %}

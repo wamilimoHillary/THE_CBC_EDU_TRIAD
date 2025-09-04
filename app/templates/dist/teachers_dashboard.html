@@ -1,0 +1,113 @@
+{% extends "teachers_base.html" %}
+
+{% block title %}Teacher Dashboard - CBC-EDU Triad{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h2>Welcome, Teacher Name!</h2>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+        <form action=" " method="">
+            <input type="text" name="query" placeholder="Search for students, tasks, or projects..." aria-label="Search">
+            <button type="submit"><i class="fas fa-search"></i></button>
+        </form>
+    </div>
+
+    <!-- Dashboard Cards -->
+    <div class="dashboard-cards">
+        <div class="card">
+            <h3><i class="fas fa-chart-line"></i> Class Progress</h3>
+            <p><strong>Average Competency Score:</strong> 78%</p>
+            <p><strong>Completed Projects:</strong> 15</p>
+            <p><strong>Pending Tasks:</strong> 5</p>
+        </div>
+        <div class="card">
+            <h3><i class="fas fa-tasks"></i> Tasks</h3>
+            <p><strong>Assigned Tasks:</strong> 10</p>
+            <p><strong>Tasks to Review:</strong> 3</p>
+            <a href="{{ url_for('teacher.assign_tasks') }}" class="btn-action">Assign New Task</a>
+        </div>
+        <div class="card">
+            <h3><i class="fas fa-folder"></i> Projects</h3>
+            <p><strong>Projects Submitted:</strong> 12</p>
+            <p><strong>Projects to Review:</strong> 4</p>
+            <a href="{{ url_for('teacher.review_projects') }}" class="btn-action">Review Projects</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .dashboard-container {
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .search-bar {
+        margin-bottom: 30px;
+    }
+
+    .search-bar form {
+        display: flex;
+        align-items: center;
+    }
+
+    .search-bar input[type="text"] {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px 0 0 5px;
+        font-size: 16px;
+    }
+
+    .search-bar button {
+        padding: 10px 15px;
+        background-color: #004d4d;
+        color: white;
+        border: none;
+        border-radius: 0 5px 5px 0;
+        cursor: pointer;
+    }
+
+    .search-bar button:hover {
+        background-color: #ff7f00;
+    }
+
+    .dashboard-cards {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .card {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        flex: 1 1 calc(33.333% - 40px);
+        min-width: 250px;
+    }
+
+    .card h3 {
+        margin-top: 0;
+        color: #004d4d;
+    }
+
+    .btn-action {
+        background-color: #004d4d;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 5px;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 10px;
+    }
+
+    .btn-action:hover {
+        background-color: #ff7f00;
+    }
+</style>
+{% endblock %}

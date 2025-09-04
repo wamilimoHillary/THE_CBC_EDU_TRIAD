@@ -1,0 +1,190 @@
+{% extends "parent/parents_base.html" %}
+
+{% block title %}Child's Progress - CBC-EDU Triad{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+  <!-- Stats Grid -->
+  <div class="dashboard-grid">
+    <!-- Competency Score -->
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h2 class="card-title">Competencies Overview</h2>
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        </svg>
+      </div>
+      <div class="stats-number">6</div>
+      <div class="stats-label">Demonstrated Competencies</div>
+      <a href="#" class="card-button-link">View All</a>
+    </div>
+
+    <!-- Projects -->
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h2 class="card-title">Student Projects</h2>
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+      </div>
+      <div class="stats-number">5</div>
+      <div class="stats-label">Total Completed Projects</div>
+      <a href="#" class="card-button-link">View All</a>
+    </div>
+
+    <!-- Pending Tasks -->
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h2 class="card-title">Pending Tasks</h2>
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+      </div>
+      <div class="stats-number">2</div>
+      <div class="stats-label">Tasks Requiring Attention</div>
+      <a href="#" class="card-button-link">View All</a>
+    </div>
+  </div>
+
+  <!-- Recent Activity & Quick Actions -->
+  <div class="dashboard-grid">
+    <!-- Activity -->
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h2 class="card-title">Recent Activity</h2>
+      </div>
+      <div class="activity-item">✔️ Submitted "Water Purifier Project"</div>
+      <div class="activity-item">📬 Feedback received from Teacher Jane</div>
+      <div class="activity-item">📌 Uploaded images for "Recycling Model"</div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h2 class="card-title">Quick Actions</h2>
+      </div>
+      <a href="#" class="quick-action-btn">Give feddback</a>
+      <a href="#" class="quick-action-btn">View Feedback</a>
+      <a href="#" class="quick-action-btn">messages</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+  .dashboard-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2rem 1.5rem;
+  }
+
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .dashboard-card {
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+    transition: transform 0.2s ease;
+  }
+
+  .dashboard-card:hover {
+    transform: translateY(-4px);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+  }
+
+  .card-icon {
+    width: 24px;
+    height: 24px;
+    stroke-width: 2;
+    color: #4a90e2;
+  }
+
+  .stats-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.3rem;
+  }
+
+  .stats-label {
+    font-size: 0.95rem;
+    color: #7f8c8d;
+    margin-bottom: 1rem;
+  }
+
+  .card-button-link {
+    padding: 0.45rem 0.9rem;
+    background-color: #4a90e2;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    transition: background-color 0.2s ease;
+  }
+
+  .card-button-link:hover {
+    background-color: #357ab7;
+  }
+
+  .activity-item {
+    font-size: 0.95rem;
+    margin-bottom: 0.6rem;
+    padding-left: 1rem;
+    position: relative;
+    color: #333;
+  }
+
+  .activity-item::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #4a90e2;
+    font-weight: bold;
+  }
+
+  .quick-action-btn {
+    display: block;
+    margin-bottom: 0.7rem;
+    padding: 0.55rem 1rem;
+    background-color: #27ae60;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease;
+  }
+
+  .quick-action-btn:hover {
+    background-color: #219150;
+  }
+
+  @media (max-width: 768px) {
+    .dashboard-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+{% endblock %}
+

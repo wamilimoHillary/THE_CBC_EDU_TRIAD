@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CBC-EDU Triad Parent Dashboard{% endblock %}</title>
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS student_base.css-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/student_base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/colors.css') }}">   
+    {% block styles %}{% endblock %}
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/student_base.js') }}" defer></script>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="dashboard-sidebar"  id="sidebar" >
+        <button id="close-btn" aria-label="Close">&times;</button>
+        <div class="sidebar-header">
+            <h2>Dashboard</h2>
+        </div>
+
+        <nav>
+            <!-- Child's Progress -->
+            <a href="{{ url_for('parent.parents_dashboard') }}" class="sidebar-link active">
+                <i class="fas fa-chart-pie"></i> Child's Progress
+            </a>
+        
+            <!-- Profile -->
+            <a href="{{ url_for('parent.parent_profile') }}" class="sidebar-link">
+                <i class="fas fa-user"></i> Profile
+            </a>
+        
+            <!-- Projects -->
+            <a href="{{ url_for('parent.parent_projects') }}" class="sidebar-link">
+                <i class="fas fa-folder"></i> Projects
+            </a>
+        
+            <!-- Feedback -->
+            <a href="{{ url_for('parent.parent_feedback') }}" class="sidebar-link">
+                <i class="fas fa-comment"></i> Feedback
+            </a>
+        
+            <!-- Reports -->
+            <a href="{{ url_for('parent.parent_reports') }}" class="sidebar-link">
+                <i class="fas fa-file-alt"></i> Reports
+            </a>
+        
+            <!-- Notifications -->
+            <a href="{{ url_for('parent.parent_notifications') }}" class="sidebar-link">
+                <i class="fas fa-bell"></i> Notifications
+            </a>
+        
+            <!-- Settings -->
+            <a href="{{ url_for('parent.parent_settings') }}" class="sidebar-link">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+        </nav>
+        
+    </aside>
+
+    <!-- Header -->
+    <header class="dashboard-header">
+     <!-- Hamburger menu button -->
+        <button class="Hamburger-menu-btn" id="Hamburger-menu-btn" aria-label="Menu">&#8942;&#8942;&#8942;</button>
+
+        <h1>Welcome, Parent Name!</h1>
+        <a href="{{url_for('auth.logout')}}" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</a> 
+
+        
+         <!-- Dropdown to select child -->
+         <div class="child-selector">
+            <select id="child-select">
+                <option value="0">Select a Child</option>
+                <option value="1">Child 1</option>
+                <option value="2">Child 2</option>
+                <option value="3">Child 3</option>
+            </select>
+        </div>
+ 
+    </header>
+
+    <!-- Main Content -->
+    <main class="dashboard-content">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

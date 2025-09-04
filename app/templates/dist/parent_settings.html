@@ -1,0 +1,68 @@
+{% extends "parents_base.html" %}
+
+{% block title %}Settings - CBC-EDU Triad{% endblock %}
+
+{% block content %}
+<div class="settings-container">
+    <h2>Settings</h2>
+    <form id="settings-form">
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" value="jane.doe@example.com" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter new password">
+        </div>
+        <div class="form-group">
+            <label for="notifications">Notification Preferences</label>
+            <select id="notifications" name="notifications">
+                <option value="all">All Notifications</option>
+                <option value="important">Important Only</option>
+                <option value="none">None</option>
+            </select>
+        </div>
+        <button type="submit" class="btn-save">Save Changes</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .settings-container {
+        padding: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .form-group input, .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid var(--border-primary);
+        border-radius: 5px;
+        background-color: var(--text-primary);
+        color: var(--text-secondary);
+    }
+
+    .btn-save {
+        background-color: var(--btn-primary);
+        color: var(--text-secondary);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .btn-save:hover {
+        background-color: var(--btn-hover);
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,211 @@
+{% extends "student/student_base.html" %}
+
+{% block content %}
+<style>
+/* General Styling */
+.container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+/* Card Header */
+.custom-header {
+    background-color: #007bff;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.custom-header h4 {
+    font-size: 1.25rem;
+}
+
+/* Back Button */
+.btn-back {
+    padding: 6px 12px;
+    background-color: #f8f9fa;
+    color: #007bff;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.875rem;
+}
+
+.btn-back:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Competency Display */
+.competency-display {
+    background-color: #f8f9fa;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.competency-display h5 {
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.competency-display .score {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #28a745;
+}
+
+/* Badges */
+.badge {
+    font-size: 0.875rem;
+    padding: 6px 12px;
+    border-radius: 3px;
+    display: inline-block;
+    white-space: nowrap;
+    min-width: 100px;
+    text-align: center;
+}
+
+.badge-secondary {
+    background-color: #6c757d;
+}
+
+.badge-info {
+    background-color: #17a2b8;
+}
+
+/* Alert Box */
+.alert-info {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.alert-heading {
+    font-size: 1.125rem;
+    font-weight: 500;
+}
+
+/* Table Styling */
+.table-container {
+    margin-top: 20px;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+table th {
+    background-color: #f8f9fa;
+    color: #495057;
+}
+
+table td {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+/* Table Row Styling */
+tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Performance Level Badge Colors */
+.badge-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.badge-warning {
+    background-color: #ffc107;
+    color: black;
+}
+
+.badge-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* No Feedback Message */
+.text-muted {
+    color: #6c757d;
+}
+</style>
+
+<div class="container py-4">
+    <div class="card shadow-sm">
+        <div class="card-header custom-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="{{ url_for('student.competency_results') }}" 
+                   class="btn-back">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+        </div>
+        
+        <div class="card-body">
+            <!-- Competency and Score Display -->
+            <div class="competency-display">
+                <h5>Competency: {{ assessment[1] }}</h5>
+                <p class="score">Score: {{ assessment[2] }}%</p>
+            </div>
+
+            {% if assessment[3] %}
+            <div class="alert-info">
+                <h5 class="alert-heading">General Feedback</h5>
+                {{ assessment[3] }}
+            </div>
+            {% endif %}
+            
+            <h2 class="mb-3">Criterion Breakdown for Competency</h2>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr class="table-header">
+                            <th>Criteria</th>
+                            <th>Performance Level</th>
+                            <th>Score</th>
+                            <th>Feedback</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for criteria in criteria_ratings %}
+                        <tr>
+                            <td>{{ criteria[1] }}</td>
+                            <td>
+                                <span class="badge
+                                    {% if criteria[3] >= 80 %}badge-success
+                                    {% elif criteria[3] >= 50 %}badge-warning
+                                    {% else %}badge-danger{% endif %}">
+                                    {{ criteria[2] }}
+                                </span>
+                            </td>
+                            <td>{{ criteria[3] }}%</td>
+                            <td>
+                                {% if criteria[4] %}
+                                    {{ criteria[4] }}
+                                {% else %}
+                                    <span class="text-muted">No feedback</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

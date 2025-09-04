@@ -1,0 +1,186 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Manage Rubrics - CBC-EDU Triad{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_manage.css') }}">
+{% endblock %}
+
+{% block admin_content %}
+<div class="manage-users">
+    <h2>Manage Rubrics</h2>
+    <a href="#" class="btn-add" data-modal="add-rubric-modal"><i class="fas fa-plus"></i> Add Rubric</a>
+
+    <div class="search-container">
+        <form action="" method="GET" class="search-wrapper">
+            <input type="text" id="search-input" name="query" placeholder="Search Rubrics..." value="">
+            <button type="submit" id="search-button"><i class="fas fa-search"></i></button>
+        </form>
+    </div>
+
+    <table class="users-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Criteria</th>
+                <th>Performance Level</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rubric in rubrics %}
+            <tr>
+                <td>{{ rubric[0] }}</td> <!-- RubricID -->
+                <td>{{ rubric[1] }}</td> <!-- CriteriaName -->
+                <td>{{ rubric[2] }}</td> <!-- LevelName -->
+                <td>{{ rubric[3] }}</td> <!-- Description -->
+                <td>
+                    <a href="#" class="btn-edit" data-modal="edit-rubric-modal" data-rubric-id="{{ rubric[0] }}">Edit</a>
+                    <a href="#" class="btn-delete" data-modal="delete-rubric-modal" data-rubric-id="{{ rubric[0] }}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Add Rubric Modal -->
+    <div id="add-rubric-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Add Rubric</h2>
+            <form id="add-rubric-form" action="{{ url_for('admin.add_rubric') }}" method="POST" class="auth-form">
+                <div class="input-group">
+                    <select id="criteria-id" name="criteria_id" required>
+                        <option value="">Select Criteria</option>
+                        {% for criterion in criteria %}
+                        <option value="{{ criterion[0] }}">{{ criterion[1] }} ({{ criterion[2] }})</option>
+                        {% endfor %}
+                    </select>
+                    <label for="criteria-id">Criteria</label>
+                </div>
+                <div class="input-group">
+                    <select id="performance-level-id" name="performance_level_id" required>
+                        <option value="">Select Performance Level</option>
+                        {% for level in performance_levels %}
+                        <option value="{{ level[0] }}">{{ level[1] }} (Score: {{ level[3] }})</option>
+                        {% endfor %}
+                    </select>
+                    <label for="performance-level-id">Performance Level</label>
+                </div>
+                <div class="input-group">
+                    <textarea id="rubric-description" name="description" placeholder=" " required></textarea>
+                    <label for="rubric-description">Description</label>
+                </div>
+                <button type="submit" class="form-button"><i class="fas fa-plus"></i> Add Rubric</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Rubric Modal -->
+    <div id="edit-rubric-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Edit Rubric</h2>
+            <form id="edit-rubric-form" action="{{ url_for('admin.edit_rubric') }}" method="POST" class="auth-form">
+                <input type="hidden" id="edit-rubric-id" name="rubric_id">
+                <div class="input-group">
+                    <select id="edit-criteria-id" name="criteria_id" required>
+                        {% for criterion in criteria %}
+                        <option value="{{ criterion[0] }}">{{ criterion[1] }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="edit-criteria-id">Criteria</label>
+                </div>
+                <div class="input-group">
+                    <select id="edit-performance-level-id" name="performance_level_id" required>
+                        {% for level in performance_levels %}
+                        <option value="{{ level[0] }}">{{ level[1] }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="edit-performance-level-id">Performance Level</label>
+                </div>
+                <div class="input-group">
+                    <textarea id="edit-rubric-description" name="description" placeholder=" " required></textarea>
+                    <label for="edit-rubric-description">Description</label>
+                </div>
+                <button type="submit" class="form-button"><i class="fas fa-save"></i> Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Rubric Modal -->
+    <div id="delete-rubric-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Delete Rubric</h2>
+            <p>Are you sure you want to delete this rubric?</p>
+            <form id="delete-rubric-form" action="{{ url_for('admin.delete_rubric') }}" method="POST">
+                <input type="hidden" id="delete-rubric-id" name="rubric_id">
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel">Cancel</button>
+                    <button type="submit" class="btn-confirm-delete">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="overlay"></div>
+</div>
+
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const overlay = document.getElementById('overlay');
+
+        // Edit buttons
+        const editButtons = document.querySelectorAll('.btn-edit');
+        editButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const modalId = button.getAttribute('data-modal');
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    const rubricId = button.getAttribute('data-rubric-id');
+                    fetchRubricDetails(rubricId, modal);
+                    modal.style.display = 'block';
+                    overlay.style.display = 'block';
+                }
+            });
+        });
+
+        // Delete buttons
+        const deleteButtons = document.querySelectorAll('.btn-delete');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const modalId = button.getAttribute('data-modal');
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    const rubricId = button.getAttribute('data-rubric-id');
+                    document.getElementById('delete-rubric-id').value = rubricId;
+                    modal.style.display = 'block';
+                    overlay.style.display = 'block';
+                }
+            });
+        });
+
+        // Fetch rubric details
+        function fetchRubricDetails(rubricId, modal) {
+            fetch(`/admin/get_rubric/${rubricId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        console.error(data.error);
+                        return;
+                    }
+                    document.getElementById('edit-rubric-id').value = data.RubricID;
+                    document.getElementById('edit-criteria-id').value = data.CriteriaID;
+                    document.getElementById('edit-performance-level-id').value = data.PerformanceLevelID;
+                    document.getElementById('edit-rubric-description').value = data.Description;
+                })
+                .catch(error => console.error('Error fetching rubric details:', error));
+        }
+    });
+</script>
+{% endblock %}

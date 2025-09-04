@@ -1,0 +1,140 @@
+{% extends "teacher/teacher_base.html" %}
+
+{% block teacher_content %}
+<style>
+    .submission-container {
+        padding: 25px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .submission-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+    }
+    .submission-table th {
+        background-color: #f8f9fa;
+        padding: 12px 15px;
+        text-align: left;
+        font-weight: 600;
+        color: #495057;
+        border-bottom: 2px solid #dee2e6;
+    }
+    .submission-table td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #eaeaea;
+        vertical-align: middle;
+    }
+    .badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+    .badge-group {
+        background-color: #e3f2fd;
+        color: #0d47a1;
+    }
+    .badge-individual {
+        background-color: #e8f5e9;
+        color: #1b5e20;
+    }
+    .badge-late {
+        background-color: #ffebee;
+        color: #c62828;
+    }
+    .badge-ontime {
+        background-color: #f1f8e9;
+        color: #33691e;
+    }
+    .btn-assess {
+        background-color: #1976d2;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 4px;
+        font-size: 13px;
+    }
+    .group-info {
+        font-style: italic;
+        color: #666;
+        font-size: 0.9em;
+    }
+</style>
+
+<div class="submission-container">
+    <h2 class="mb-4">
+        <i class="fas fa-file-upload me-2"></i>
+        Submissions for Assessment
+    </h2>
+
+     <!-- Display Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+    <div class="flash-messages">
+        {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endwith %}
+    
+    {% if not submissions %}
+    <div class="alert alert-info">
+        No submissions awaiting assessment
+    </div>
+    {% else %}
+    <div class="table-responsive">
+        <table class="submission-table">
+            <thead>
+                <tr>
+                    <th>Task</th>
+                    <th>Type</th>
+                    <th>Submitted By</th>
+                    <th>Class</th>
+                    <th>Submitted</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sub in submissions %}
+                <tr>
+                    <td>{{ sub[1] }}</td>
+                    <td>
+                        <span class="badge {% if sub[8] %}badge-group{% else %}badge-individual{% endif %}">
+                            {% if sub[8] %}Group Work{% else %}Individual{% endif %}
+                        </span>
+                        {% if sub[8] %}
+                        <div class="group-info">Group: {{ sub[9] }}</div>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ sub[3] }}
+                        {% if sub[8] %}
+                        <div class="group-info">(Submitter)</div>
+                        {% endif %}
+                    </td>
+                    <td>{{ sub[6] or 'N/A' }}</td>
+                    <td>{{ sub[2].strftime('%b %d, %H:%M') }}</td>
+                    <td>
+                        <span class="badge {% if sub[4] %}badge-late{% else %}badge-ontime{% endif %}">
+                            {% if sub[4] %}Late{% else %}On Time{% endif %}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('teacher.assess_submission', project_id=sub[0]) }}" 
+                           class="btn-assess">
+                           Assess
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

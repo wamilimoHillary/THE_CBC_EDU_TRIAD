@@ -1,0 +1,190 @@
+{% extends 'parent/parents_base.html' %}
+
+{% block title %}Criteria Feedback{% endblock %}
+
+{% block content %}
+<style>
+
+    body{
+        overflow-x: hidden;
+    }
+  main {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 1rem;
+    font-family: 'Segoe UI', sans-serif;
+    color: #333;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  header h1 {
+    font-size: 1.8rem;
+    color: #2c3e50;
+  }
+
+  a.back-link {
+    background: #f0f0f0;
+    padding: 0.4rem 0.9rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    color: #2c3e50;
+    transition: background 0.2s;
+  }
+
+  a.back-link:hover {
+    background: #ddd;
+  }
+
+  section.card {
+    border-radius: 10px;
+    padding: 1.2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+    background: #fff;
+  }
+
+  section h2 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: #1a252f;
+  }
+
+  .info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .info-item {
+    flex: 1 1 45%;
+    font-size: 0.95rem;
+  }
+
+  .badge {
+    background-color: #3cb371;
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+  }
+
+  .feedback-text {
+    font-style: italic;
+    color: #555;
+  }
+
+  .table-container {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    margin-top: 1rem;
+  }
+
+  th, td {
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+
+  thead {
+    background: #f9f9f9;
+  }
+
+  tr:hover {
+    background: #f7f7f7;
+  }
+
+  .level-badge {
+    background-color: #3498db;
+    color: #fff;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    display: flex;
+    flex-wrap: nowrap;
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 600px) {
+
+    main {
+      padding: 0.5rem !important;;
+      }
+
+    .info-item {
+      flex: 1 1 100%;
+    }
+
+    header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    a.back-link {
+      margin-top: 0.5rem;
+    }
+  }
+</style>
+
+<main>
+  <header>
+    <h1>Criteria Feedback</h1>
+    <a href="{{ url_for('parent.competency_overview') }}" class="back-link">← Back to Overview</a>
+  </header>
+
+  <!-- Assessment Summary -->
+  <section class="card">
+    <h2>Assessment Summary</h2>
+    <div class="info">
+      <div class="info-item"><strong>Child:</strong> {{ child_info[1] }} {{ child_info[2] }}</div>
+      <div class="info-item"><strong>Task:</strong> {{ assessment[0] }}</div>
+      <div class="info-item"><strong>Competency:</strong> {{ assessment[1] }}</div>
+      <div class="info-item"><strong>Overall Score:</strong> <span class="badge">{{ assessment[2] }}</span></div>
+      <div class="info-item"><strong>Assessed On:</strong> {{ assessment[4] }}</div>
+    </div>
+    <p><strong>General Feedback:</strong></p>
+    <p class="feedback-text">{{ assessment[3] }}</p>
+  </section>
+
+  <!-- Criteria Ratings Table -->
+  <section class="card">
+    <h2>Criteria Ratings</h2>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Criteria</th>
+            <th>Performance Level</th>
+            <th>Score</th>
+            <th>Level Description</th>
+            <th>Feedback</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for rating in criteria_ratings %}
+          <tr>
+            <td>{{ rating[1] }}</td>
+            <td><span class="level-badge">{{ rating[2] }}</span></td>
+            <td>{{ rating[3] }}</td>
+            <td><small>{{ rating[5] }}</small></td>
+            <td>{{ rating[4] or '—' }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+{% endblock %}

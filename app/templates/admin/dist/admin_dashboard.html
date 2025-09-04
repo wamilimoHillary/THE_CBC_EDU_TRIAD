@@ -1,0 +1,133 @@
+<!-- templates/admin/dashboard.html -->
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Admin Dashboard - CBC-EDU Triad{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard_landing.css') }}">
+
+{% endblock %}
+
+{% block admin_content %}
+
+<main class="dashboard-container">
+    <section class="dashboard-cards">
+        <!-- Number of Students -->
+        <article class="card card-students">
+            <span class="card-icon">
+                <i class="fas fa-user-graduate"></i>
+            </span>
+            <h3 class="card-title">Students</h3>
+            <p class="card-value">{{ student_count }}</p>
+            <p class="card-label">Total enrolled students</p>
+            <a href="{{ url_for('admin.manage_students') }}" class="sidebar-link" style="background-color: var(--primary-color);">manage students</a>
+        </article>
+
+        <!-- Number of Teachers -->
+        <article class="card card-teachers">
+            <span class="card-icon">
+                <i class="fas fa-chalkboard-teacher"></i>
+            </span>
+            <h3 class="card-title">Teachers</h3>
+            <p class="card-value">{{ teacher_count }}</p>
+            <p class="card-label">Active faculty members</p>
+
+            <a href="{{ url_for('admin.manage_teachers') }}" class="sidebar-link" style="background-color: var(--secondary-color);">Manage</a>
+        </article>
+
+        <!-- Number of Parents -->
+        <article class="card card-parents">
+            <span class="card-icon">
+                <i class="fas fa-users"></i>
+            </span>
+            <h3 class="card-title">Parents</h3>
+            <p class="card-value">{{ parent_count }}</p>
+            <p class="card-label">Registered family accounts</p>
+            <a href="{{ url_for('admin.manage_parents') }}" class="sidebar-link"style="background-color: var(--accent-color);">Manage</a>
+        </article>
+
+        <!-- Number of Competencies -->
+        <article class="card card-competencies">
+            <span class="card-icon">
+                <i class="fas fa-award"></i>
+            </span>
+            <h3 class="card-title">Competencies</h3>
+            <p class="card-value">{{ competency_count}}</p>
+            <p class="card-label">Active learning objectives</p>
+            <a href="{{url_for('admin.manage_competencies')}}" class="sidebar-link" style="background-color: var(--danger-color);">Manage</a>
+        </article>
+    </section>
+
+    <section class="dashboard-sections">
+        <article class="dashboard-section">
+            <header class="section-header">
+                <h3 class="section-title">Recent Activity</h3>
+                <a href="#" class="section-action">View All</a>
+            </header>
+            <ul class="recent-activity-list">
+                <li class="activity-item">
+                    <span class="activity-icon icon-blue">
+                        <i class="fas fa-user-plus"></i>
+                    </span>
+                    <div class="activity-content">
+                        <h4 class="activity-title">New parent registered</h4>
+                        <time class="activity-time">2 hours ago</time>
+                    </div>
+                </li>
+                <li class="activity-item">
+                    <span class="activity-icon icon-green">
+                        <i class="fas fa-file-alt"></i>
+                    </span>
+                    <div class="activity-content">
+                        <h4 class="activity-title">Assessment updated for Grade 5</h4>
+                        <time class="activity-time">Yesterday</time>
+                    </div>
+                </li>
+                <li class="activity-item">
+                    <span class="activity-icon icon-orange">
+                        <i class="fas fa-comment"></i>
+                    </span>
+                    <div class="activity-content">
+                        <h4 class="activity-title">New parent feedback received</h4>
+                        <time class="activity-time">2 days ago</time>
+                    </div>
+                </li>
+                <li class="activity-item">
+                    <span class="activity-icon icon-blue">
+                        <i class="fas fa-calendar-check"></i>
+                    </span>
+                    <div class="activity-content">
+                        <h4 class="activity-title">Teacher training scheduled</h4>
+                        <time class="activity-time">3 days ago</time>
+                    </div>
+                </li>
+            </ul>
+        </article>
+
+        <article class="dashboard-section">
+            <header class="section-header">
+                <h3 class="section-title">Quick Stats</h3>
+                <a href="#" class="section-action">Reports</a>
+            </header>
+            <div class="quick-stats">
+                <div class="stat-item">
+                    <h4 class="stat-title">Attendance Rate</h4>
+                    <p class="stat-value">92%</p>
+                </div>
+                <div class="stat-item">
+                    <h4 class="stat-title">Competency Progress</h4>
+                    <p class="stat-value">78%</p>
+                </div>
+                <div class="stat-item">
+                    <h4 class="stat-title">Parent Engagement</h4>
+                    <p class="stat-value">65%</p>
+                </div>
+                <div class="stat-item">
+                    <h4 class="stat-title">Active Courses</h4>
+                    <p class="stat-value">24</p>
+                </div>
+            </div>
+        </article>
+    </section>
+</main>
+{% endblock %}

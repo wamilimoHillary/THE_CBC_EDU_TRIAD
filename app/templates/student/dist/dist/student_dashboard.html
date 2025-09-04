@@ -1,0 +1,203 @@
+{% extends "student/student_base.html" %}
+
+{% block title %}Student Dashboard - CBC-EDU Triad{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard_landing.css') }}">
+
+{% endblock %}
+
+{% block content %}
+
+<main class="dashboard-container">
+    
+     <!-- Display Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+    <div class="flash-messages">
+        {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endwith %}
+
+    <section class="dashboard-cards">
+        
+        <!-- Active Projects -->
+        <article class="card card-students">
+            <span class="card-icon">
+                <i class="fas fa-project-diagram"></i>
+            </span>
+            <h3 class="card-title">My Projects</h3>
+            <p class="card-value">{{ project_count }}</p>
+            <p class="card-label">Projects worked on</p>
+
+            <a href="{{ url_for('student.student_projects') }}" class="sidebar-link" style="background-color: rgb(0, 119, 255);">
+                    <i class="fas fa-folder"></i> 
+                       View All
+            </a>
+        </article>
+
+        <!-- Competencies Achieved -->
+        <article class="card card-teachers">
+            <span class="card-icon">
+                <i class="fas fa-chart-pie"></i>
+            </span>
+            
+            <h3 class="card-title">Competencies Overview!</h3>
+            <p class="card-value">{{ competencies_count }}</p>
+            <p class="card-label">Demonstrated competencies</p>
+            <a href="{{ url_for('student.competency_results') }}" class="sidebar-link" style="background-color: rgb(36, 175, 36);">
+                <i class="fas fa-chart-line"></i>  View All
+            </a>
+        </article>
+
+        <!-- New Feedback -->
+        <article class="card card-parents">
+            <span class="card-icon">
+                <i class="fas fa-comment-dots"></i>
+            </span>
+            <h3 class="card-title">Feedback-haha</h3>
+            <p class="card-value">12</p>
+            <p class="card-label">New messages</p>
+        </article>
+
+       <!-- Upcoming Deadlines Card -->
+        <article class="card card-competencies">
+            <span class="card-icon">
+                <i class="fas fa-calendar-alt"></i>
+            </span>
+            <h3 class="card-title">Assigned Tasks & Deadlines</h3>
+            <p class="card-value">{{ task_count }}</p>
+            <p class="card-label">Total Assigned</p>
+            
+            <a href="{{ url_for('student.student_tasks') }}" class="sidebar-link">
+                <i class="fas fa-tasks"></i> View All Tasks
+            </a>
+        </article>
+    </section>
+
+    <section class="dashboard-sections">
+        
+        <article class="dashboard-section">
+            <header class="section-header">
+                <h3 class="section-title">My Latest projects</h3>
+            </header>
+            <div class="recent-activity-list">
+                {% for project in latest_projects %}
+                    <div class="activity-item">
+                        <div class="activity-content">
+                            <h4 class="activity-title">{{ project[0] }}</h4> <!-- Task title as project name -->
+                            <time class="activity-time">Submitted on: {{ project[1] }}</time> <!-- Date submitted -->
+                            <p class="file-type">File Type: {{ project[2] }}</p> <!-- File type -->
+                        </div>
+                    </div>
+                {% else %}
+                    <p>No projects submitted yet.</p>
+                {% endfor %}
+            </div>
+        </article>
+        
+
+        <article class="dashboard-section">
+            <header class="section-header">
+                <h3 class="section-title">Competency Tracking</h3>
+                <a href="#" class="section-action">Download Report</a>
+            </header>
+            <div class="quick-stats">
+                <div class="stat-item">
+                    <h4 class="stat-title">Critical Thinking</h4>
+                    <p class="stat-value">75%</p>
+                </div>
+                <div class="stat-item">
+                    <h4 class="stat-title">Communication Skills</h4>
+                    <p class="stat-value">82%</p>
+                </div>
+                <div class="stat-item">
+                    <h4 class="stat-title">Digital Literacy</h4>
+                    <p class="stat-value">90%</p>
+                </div>
+                <div class="stat-item">
+                    <h4 class="stat-title">Collaboration</h4>
+                    <p class="stat-value">65%</p>
+                </div>
+            </div>
+        </article>
+    </section>
+<br>
+    <section class="dashboard-sections">
+        <article class="dashboard-section">
+            <header class="section-header">
+                <h3 class="section-title">Recent Messages</h3>
+                <a href="#" class="section-action">View All</a>
+            </header>
+            <div class="recent-activity-list">
+                <div class="activity-item">
+                    <span class="activity-icon icon-blue">
+                        <i class="fas fa-comment"></i>
+                    </span>
+                    <div class="activity-content">
+                        <h4 class="activity-title">Ms. Johnson (Science Teacher)</h4>
+                        <time class="activity-time">Today, 10:15 AM</time>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <span class="activity-icon icon-green">
+                        <i class="fas fa-comment"></i>
+                    </span>
+                    <div class="activity-content">
+                        <h4 class="activity-title">Mr. Williams (Math Teacher)</h4>
+                        <time class="activity-time">Yesterday, 2:30 PM</time>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <span class="activity-icon icon-orange">
+                        <i class="fas fa-comment"></i>
+                    </span>
+                    <div class="activity-content">
+                        <h4 class="activity-title">Mom</h4>
+                        <time class="activity-time">Yesterday, 7:45 PM</time>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="dashboard-section">
+            <header class="section-header">
+                <h3 class="section-title">Upcoming Deadlines</h3>
+                <a href="#" class="section-action">View All</a>
+            </header>
+            <div class="recent-activity-list">
+                <div class="activity-item">
+                    <span class="activity-icon icon-blue">
+                        <i class="fas fa-calendar-alt"></i>
+                    </span>
+                    <div class="activity-content">
+                        <h4 class="activity-title">Data Analysis Project</h4>
+                        <time class="activity-time">3 days left</time>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <span class="activity-icon icon-green">
+                        <i class="fas fa-calendar-alt"></i>
+                    </span>
+                    <div class="activity-content">
+                        <h4 class="activity-title">Digital Storytelling</h4>
+                        <time class="activity-time">10 days left</time>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <span class="activity-icon icon-orange">
+                        <i class="fas fa-calendar-alt"></i>
+                    </span>
+                    <div class="activity-content">
+                        <h4 class="activity-title">Science Fair Registration</h4>
+                        <time class="activity-time">5 days left</time>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </section>
+</main>
+{% endblock %}

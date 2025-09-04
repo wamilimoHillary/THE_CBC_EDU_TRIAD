@@ -1,0 +1,55 @@
+{% extends "parents_base.html" %}
+
+{% block title %}Feedback - CBC-EDU Triad{% endblock %}
+
+{% block content %}
+<div class="feedback-container">
+    <h2>Provide Feedback</h2>
+    <form id="feedback-form">
+        <div class="form-group">
+            <label for="feedback">Your Feedback:</label>
+            <textarea id="feedback" name="feedback" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn-submit">Submit Feedback</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .feedback-container {
+        padding: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+    }
+
+    .btn-submit {
+        background-color: var(--button-primary);
+        color: var(--text-primary);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .btn-submit:hover {
+        background-color: var(--link-hover);
+        opacity: var(--button-hover-opacity);
+    }
+</style>
+{% endblock %}

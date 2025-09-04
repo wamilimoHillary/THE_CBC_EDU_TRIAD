@@ -1,0 +1,59 @@
+{% extends "teachers_base.html" %}
+
+{% block title %}Review Projects - CBC-EDU Triad{% endblock %}
+
+{% block content %}
+<div class="projects-container">
+    <h2>Review Projects</h2>
+    <div class="project-list">
+        <div class="project-item">
+            <h3>Science Project on Renewable Energy</h3>
+            <p><strong>Student:</strong> hillary</p>
+            <p><strong>Status:</strong> Pending Review</p>
+            <button class="btn-review">Review Project</button>
+        </div>
+        <div class="project-item">
+            <h3>History of Computers Essay</h3>
+            <p><strong>Student:</strong> waititu</p>
+            <p><strong>Status:</strong> Feedback Provided</p>
+            <button class="btn-review">View Feedback</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .projects-container {
+        padding: 20px;
+    }
+
+    .project-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .project-item {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        flex: 1 1 calc(50% - 40px);
+        min-width: 250px;
+    }
+
+    .btn-review {
+        background-color: #004d4d;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .btn-review:hover {
+        background-color: #ff7f00;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "student_base.html" %}
+
+{% block title %}Notifications - CBC-EDU Triad{% endblock %}
+
+{% block content %}
+<div class="notifications-container">
+    <h2>Notifications</h2>
+    <div class="notification">
+        <p><strong>New Feedback:</strong> Your science project has been reviewed.</p>
+        <p><strong>Date:</strong> 2023-11-08</p>
+    </div>
+    <div class="notification">
+        <p><strong>Deadline Reminder:</strong> Submit your history essay by November 15th.</p>
+        <p><strong>Date:</strong> 2023-11-07</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .notifications-container {
+        padding: 20px;
+    }
+
+    .notification {
+        background-color: var(--bg-primary);
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock %}

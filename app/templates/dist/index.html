@@ -1,0 +1,50 @@
+<!-- app/templates/index.html -->
+{% extends "base.html" %}
+
+{% block title %}Home - CBC-EDU Triad{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="typewriter">
+        <span id="typing-text"></span>
+    </div>
+    <p>Student innovative Showcase</p>
+    <div class="cta-buttons">
+        <a href="{{ url_for('auth.parent_signup') }}"class="cta-primary" >Start &nbsp;<i class="fa fa-arrow-right"></i></a>
+        <a href=" {{ url_for('main.about') }}" class="cta-secondary" >More &nbsp;<i class="fa fa-book-open"></i></a>
+    
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="features">
+    <h2>Features</h2>
+    <div class="feature-cards">
+        <div class="card">
+            <i class="fa fa-project-diagram"></i>
+            <h3>Project Showcase</h3>
+            <p>Students can upload and showcase their innovation projects for review and feedback.</p>
+        </div>
+        <div class="card">
+            <i class="fa fa-chart-line"></i>
+            <h3>Competency Tracking</h3>
+            <p>Track student progress and map projects to specific CBC competencies.</p>
+        </div>
+        <div class="card">
+            <i class="fa fa-hands-helping"></i>
+            <h3>Parental Involvement</h3>
+            <p>Parents can provide feedback and stay involved in their child's learning journey.</p>
+        </div>
+        <div class="card">
+            <i class="fa fa-comment-dots"></i>
+            <h3>Receive feedback</h3>
+            <p>Parents can provide feedback and stay involved in their child's learning journey.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

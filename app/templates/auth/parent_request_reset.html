@@ -1,0 +1,40 @@
+{% extends "main/base.html" %}
+
+{% block title %}Parent Reset Password - CBC-EDU Triad{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="parent_main">
+    <div class="form-container">
+
+            <!-- Display Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% endwith %}
+
+
+        <h2>Parent Reset Password</h2>
+        <p class="description">Enter your registered email address. A link will be sent to your email to reset your password. Please follow the link to complete the process.</p>
+        
+        <form action="{{ url_for('auth.parent_forgot_password') }}" method="post">
+            <div class="input-group">
+                <input type="text" id="email" name="email" placeholder="Enter your Email" required>
+                <label for="email">*Email</label>
+            </div>
+            <button type="submit" class="form-button">
+                Reset Password <i class="fas fa-key"></i> 
+            </button>
+        </form>
+        <p>Remember your password? <a href="{{ url_for('auth.parent_login') }}" class="forgotten-password"> <i class="fa fa-arrow-right"></i>Login</a></p>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,206 @@
+{% extends "teacher/teacher_base.html" %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_manage.css') }}">
+<style>
+.teacher_main {
+    background: url("{{ url_for('static', filename='images/student2.jpg') }}") no-repeat center/cover;
+    padding: 1rem;
+}
+
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: var(--form-color);
+    padding: 30px 40px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    color: var(--text-primary);
+    backdrop-filter: blur(10px);
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.input-group input,
+.input-group select {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 0 0 10px 10px;
+    border-bottom: 2px solid var(--border-color);
+    background: transparent;
+    outline: none;
+    font-size: 16px;
+    color: var(--text-primary);
+    transition: 0.3s;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    border-bottom: 1.5px solid var(--text-secondary);
+    border-radius: 10px;
+}
+
+.input-group label {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--text-primary);
+    background: transparent;
+    padding: 0 5px;
+    transition: 0.3s ease;
+    pointer-events: none;
+}
+
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label,
+.input-group select:focus + label,
+.input-group select:not(:placeholder-shown) + label {
+    top: -4px;
+    left: 0;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.input-group input::placeholder {
+    visibility: hidden;
+}
+
+.input-group input:focus::placeholder {
+    visibility: visible;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.student-list {
+    max-height: 250px;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    margin-bottom: 20px;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 15px;
+    color: var(--text-primary);
+}
+
+.form-check input {
+    margin-right: 10px;
+}
+
+.form-button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 25px;
+    background-color: var(--button-primary);
+    color: var(--text-tertiary);
+    font-size: 16px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    font-weight: bold;
+}
+
+.form-button:hover {
+    opacity: var(--button-hover-opacity);
+}
+
+.table {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+}
+
+.view_link{
+    color: var(--button-primary);
+    background-color: var(--text-primary);
+    padding: 2px 5px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+</style>
+{% endblock %}
+
+{% block teacher_content %}
+<main class="teacher_main">
+
+    <br> <hr><br>
+    <!-- Display Existing Groups -->
+    <div class="form-container mt-4">
+        <h3>Your Groups</h3>
+        {% if not groups %}
+            <div class="alert alert-info">
+                No groups created yet
+            </div>
+        {% else %}
+            <div class="table-responsive mt-3">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Group Name</th>
+                            <th>Members</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for group in groups %}
+                        <tr>
+                            <td>{{ group[1] }}</td>
+                            <td>{{ group[2] }}</td>
+                            <td>
+                                <a href="{{ url_for('teacher.view_group', group_id=group[0]) }}" 
+                                   class="view_link">
+                                   <i class="fas fa-eye"></i> View
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+
+<br> <br>
+    <div class="form-container">
+        <h2>Manage Student Groups</h2>
+        <form method="POST">
+            <!-- Group Name -->
+            <div class="input-group">
+                <input type="text" id="group_name" name="group_name" placeholder=" " required>
+                <label for="group_name">Group Name</label>
+            </div>
+
+            <!-- Select Members -->
+            <div class="student-list">
+                {% for student in students %}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" 
+                           id="student_{{ student[0] }}" 
+                           name="student_ids" value="{{ student[0] }}">
+                    <label class="form-check-label" for="student_{{ student[0] }}">
+                        {{ student[2] }}, {{ student[1] }}
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="form-button">
+                <i class="fas fa-save"></i> Create Group
+            </button>
+        </form>
+    </div>
+</main>
+{% endblock %}

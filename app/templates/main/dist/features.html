@@ -1,0 +1,61 @@
+<!-- app/templates/features.html -->
+{% extends "main/base.html" %}
+
+{% block title %}Features - CBC-EDU Triad{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
+{% block content %}
+<h1 style="text-align: center;color: var(--text-primary);">Features</h1>
+
+<!-- Features Section -->
+<section id="features" class="features">
+    <h2>Core Features</h2>
+    <div class="feature-cards">
+
+        <div class="card">
+            <i class="fa fa-layer-group"></i>
+            <h3>Competency Mapping</h3>
+            <p>Projects are mapped to CBC competencies to help track student growth in real learning domains.</p>
+        </div>
+
+        <div class="card">
+            <i class="fa fa-clipboard-check"></i>
+            <h3>Rubric-Based Assessment</h3>
+            <p>Teachers assess student work based on rubrics aligned with CBC performance levels and criteria.</p>
+        </div>
+
+        <div class="card">
+            <i class="fa fa-upload"></i>
+            <h3>Project Submission</h3>
+            <p>Students upload innovation tasks with support for various file types, deadlines, and edit options.</p>
+        </div>
+
+        <div class="card">
+            <i class="fa fa-comments"></i>
+            <h3>Feedback Mechanism</h3>
+            <p>Both teachers and parents can provide structured feedback to improve student engagement and learning.</p>
+        </div>
+
+    </div>
+
+    <h2 style="margin-top: 3rem;">Upcoming Features</h2>
+    <div class="feature-cards">
+
+        <div class="card">
+            <i class="fa fa-chart-pie"></i>
+            <h3>Progress Visualization</h3>
+            <p>Interactive charts and dashboards to help students and teachers monitor competency growth.</p>
+        </div>
+
+        <div class="card">
+            <i class="fa fa-file-alt"></i>
+            <h3>Report Generation</h3>
+            <p>Auto-generate performance and project summary reports for students and teachers.</p>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

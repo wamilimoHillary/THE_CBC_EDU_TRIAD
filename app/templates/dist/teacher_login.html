@@ -1,0 +1,33 @@
+<!-- app/templates/teacher_login.html -->
+{% extends "base.html" %}
+
+{% block title %}Teacher Login - CBC-EDU Triad{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="teacher_main">
+    <div class="form-container">
+        <h2>Teacher Log In</h2>
+        <form action="" method="post">
+            <div class="input-group">
+                <input type="email" id="email" name="email" placeholder="Enter your Email or Phone" required>
+                <label for="email">*Email or Phone</label>
+            </div>
+            
+            <div class="input-group">
+                <input type="password" id="password" name="password" placeholder="Enter password min 4 & max 8 characters" required>
+                <label for="password">*Password</label>
+            </div>
+           
+            <button type="submit" class="form-button">
+                Login <i class="fas fa-sign-in-alt"></i> 
+            </button>
+        </form>
+        <a href="{{ url_for('auth.forgot_password') }}" class="forgot-password"> <i class="fa fa-key"></i>Forgot password?</a>
+           
+    </div>
+</main>
+{% endblock %}

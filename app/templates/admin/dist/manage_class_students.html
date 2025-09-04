@@ -1,0 +1,166 @@
+<!-- templates/admin/manage_class_students.html -->
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Manage Class Students - CBC-EDU Triad{% endblock %}
+
+{% block admin_content %}
+<div class="manage-class-students">
+  <!-- Display Flash Messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+      <div class="flash-messages">
+          {% for category, message in messages %}
+              <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+      </div>
+  {% endif %}
+  {% endwith %}
+
+    <div class="class-header">
+        <h2>Manage Students: {{ class_info[1] }}</h2>
+        <p>Teacher: {{ class_info[2] }}</p>
+        <a href="{{ url_for('admin.manage_classes') }}" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Back to Classes
+        </a>
+    </div>
+
+    <div class="student-lists">
+        <!-- Enrolled Students -->
+        <div class="enrolled-students">
+            <h3>Enrolled Students ({{ enrolled_students|length }})</h3>
+            {% if enrolled_students %}
+            <table class="students-table">
+                <thead>
+                    <tr>
+                        <th>Student Number</th>
+                        <th>Name</th>
+                        <th>Enrollment Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in enrolled_students %}
+                    <tr>
+                        <td>{{ student[3] }}</td>  <!-- Student Number -->
+                        <td>{{ student[1] }} {{ student[2] }}</td>  <!-- Name -->
+                        <td>
+                            {% if student|length > 4 %}  <!-- Safe check -->
+                                {{ student[4].strftime('%Y-%m-%d') }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td>
+                            <form action="{{ url_for('admin.remove_student_from_class') }}" method="POST">
+                                <input type="hidden" name="class_id" value="{{ class_info[0] }}">
+                                <input type="hidden" name="student_id" value="{{ student[0] }}">
+                                <button type="submit" class="btn-remove">
+                                    <i class="fas fa-user-minus"></i> Remove
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No students enrolled in this class yet.</p>
+            {% endif %}
+        </div>
+
+        <!-- Available Students -->
+        <div class="available-students">
+            <h3>Available Students ({{ available_students|length }})</h3>
+            {% if available_students %}
+            <!-- Available Students Table -->
+<table class="students-table">
+    <thead>
+        <tr>
+            <th>Student Number</th>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for student in available_students %}
+        <tr>
+            <td>{{ student[3] }}</td>  <!-- Student Number -->
+            <td>{{ student[1] }} {{ student[2] }}</td>  <!-- Name -->
+            <td><span class="badge bg-success">Available</span></td>
+            <td>
+                <form action="{{ url_for('admin.add_student_to_class') }}" method="POST">
+                    <input type="hidden" name="class_id" value="{{ class_info[0] }}">
+                    <input type="hidden" name="student_id" value="{{ student[0] }}">
+                    <button type="submit" class="btn btn-sm btn-primary">
+                        <i class="fas fa-user-plus"></i> Add
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="4" class="text-center">No available students</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+            {% else %}
+            <p>No available students to add.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+   
+    .manage-class-students {
+        padding: 20px;
+    }
+    .class-header {
+        margin-bottom: 20px;
+    }
+    .btn-back {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 5px 10px;
+        background: #6c757d;
+        color: white;
+        border-radius: 4px;
+        text-decoration: none;
+    }
+    .student-lists {
+        display: flex;
+        gap: 30px;
+    }
+    .enrolled-students, .available-students {
+        flex: 1;
+    }
+    .students-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .students-table th, .students-table td {
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+    .inline-form {
+        display: inline;
+    }
+    .btn-add, .btn-remove {
+        padding: 3px 8px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+    .btn-add {
+        background: #28a745;
+        color: white;
+    }
+    .btn-remove {
+        background: #dc3545;
+        color: white;
+    }
+</style>
+{% endblock %}

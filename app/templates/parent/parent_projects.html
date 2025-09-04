@@ -1,0 +1,236 @@
+{% extends 'parent/parent_base.html' %}
+
+{% block title %}Child Projects{% endblock %}
+
+{% block content %}
+<main class="project-section">
+    <header class="project-header">
+        <h2>
+            {% if selected_child %}
+                {{ selected_child[1] }} {{ selected_child[2] }}'s Projects
+            {% else %}
+                Child Projects
+            {% endif %}
+        </h2>
+        <p>View and manage your child's submitted projects</p>
+    </header>
+
+    <!-- Child Selector -->
+    <div class="child-selector">
+        <select class="child-select">
+            <option value="">-- Select Child --</option>
+            {% for child in children %}
+            <option value="{{ child[0] }}"
+                {% if selected_child and child[0] == selected_child[0] %}selected{% endif %}>
+                {{ child[1] }} {{ child[2] }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Filter Controls -->
+    <section class="filter-controls">
+        <input type="text" id="searchInput" placeholder="Search by Task Title..." />
+        <select id="fileTypeFilter">
+            <option value="">All File Types</option>
+            <option value="pdf">PDF</option>
+            <option value="jpg">JPG</option>
+            <option value="png">PNG</option>
+            <option value="docx">DOCX</option>
+            <option value="pptx">PPTX</option>
+        </select>
+    </section>
+
+    {% if projects %}
+    <section class="table-container">
+        <div class="scrollable-table">
+            <table class="project-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Task Title</th>
+                        <th>Submitted On</th>
+                        <th>File Type</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for project in projects %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ project[1] }}</td>
+                        <td>{{ project[2].strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td>{{ project[3] }}</td>
+                        <td>
+                            <a href="{{ project[4] }}" download class="download-link">View</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+    {% else %}
+    <section class="no-projects">
+        <p>No projects found for this child.</p>
+    </section>
+    {% endif %}
+</main>
+
+<!-- JavaScript for Filtering -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("searchInput");
+        const fileTypeFilter = document.getElementById("fileTypeFilter");
+        const rows = document.querySelectorAll(".project-table tbody tr");
+
+        function filterProjects() {
+            const search = searchInput.value.toLowerCase();
+            const type = fileTypeFilter.value.toLowerCase();
+
+            rows.forEach(row => {
+                const taskTitle = row.children[1].textContent.toLowerCase();
+                const fileType = row.children[3].textContent.toLowerCase();
+
+                const matchesTitle = taskTitle.includes(search);
+                const matchesType = !type || fileType === type;
+
+                row.style.display = matchesTitle && matchesType ? "" : "none";
+            });
+        }
+
+        searchInput.addEventListener("input", filterProjects);
+        fileTypeFilter.addEventListener("change", filterProjects);
+    });
+</script>
+
+<!-- Styles (same as student projects) -->
+<style>
+/* Layout */
+.project-section {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.project-header h2 {
+    font-size: 1.8rem;
+    margin-bottom: 0.25rem;
+}
+
+.project-header p {
+    color: #666;
+    font-size: 0.95rem;
+}
+
+/* Child Selector */
+.child-selector {
+    margin-bottom: 1rem;
+}
+
+.child-selector select {
+    padding: 0.7rem 1rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 100%;
+    max-width: 300px;
+}
+
+/* Filter Controls */
+.filter-controls {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-around;
+    margin-bottom: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.filter-controls input,
+.filter-controls select {
+    padding: 0.7rem 0.75rem;
+    font-size: 0.95rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+}
+
+.filter-controls input {
+    flex: 2;
+    border-radius: 24px;
+}
+
+/* Scrollable container */
+.table-container {
+    width: 100%;
+}
+
+.scrollable-table {
+    overflow-x: auto;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+/* Table styles */
+.project-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+.project-table th,
+.project-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+    white-space: nowrap;
+}
+
+.project-table th {
+    background-color: #e0f0ff;
+    font-weight: bold;
+    color: #333;
+}
+
+.project-table tr:nth-child(even) {
+    background-color: #fcfcfc;
+}
+
+/* Action Link */
+.download-link {
+    color: #0077cc;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.download-link:hover {
+    text-decoration: underline;
+}
+
+/* No projects section */
+.no-projects {
+    text-align: center;
+    font-size: 1rem;
+    color: #888;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .project-header h2 {
+        font-size: 1.4rem;
+    }
+
+    .filter-controls input {
+        max-width: 90%;
+    }
+
+    .project-table th,
+    .project-table td {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+    }
+}
+</style>
+{% endblock %}

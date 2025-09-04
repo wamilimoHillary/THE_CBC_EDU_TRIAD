@@ -1,0 +1,35 @@
+/*color variables for light mode */
+:root {
+    --bg-gradient: linear-gradient(90deg, #26c7c2 0%, #064546 100%);
+    --bg-gradient2: linear-gradient(90deg,#064546  0%,  #03908b 100%);
+   --bg-primary: #f7e8c8;  /*first background */
+   --bg-secondary: #3a47d5; /*second background */
+   --bg-tertiary:  #3a47d55e;/*third background */
+   --accent-background: #ff8000;/*fourth background */
+   --text-primary: #ffffff; /* Text color 1 */
+   --text-secondary: #ff8000; /* Text color  2*/
+   --text-tertiary: #2c2a2a; /* Text color 3*/
+   --button-primary: #ff8000; 
+   --button-secondary:#07ae0f;
+   --button-hover-opacity: 0.7; /* Button hover opacity */
+   --link-default:  #ffffff;
+    --link-hover:  #ff8000;
+    --border-color: #ff8000;
+    --form-color:rgba(12, 12, 116, 0.47);
+    --bg-danger:#f30808;
+    --bg-success: #00840d;
+    --warning:rgb(255, 217, 0);
+   }
+   
+   /* color variables for dark mode */
+   .dark-mode {
+     --bg-primary: #1e1e1e;  /*first background */
+   --bg-secondary: #343333; /*second background */
+    --bg-gradient: linear-gradient(90deg, #0f0f0f 0%, #1c1c1c 40%, #1c2b36 50%, #101820 60%, #283c48 80%, #1a1a1a 100%);
+    --bg-gradient2: linear-gradient(90deg, #0f0f0f 0%, #1c1c1c 40%, #1c2b36 50%, #101820 60%, #283c48 80%, #1a1a1a 100%);
+   --link-default: #23aeff;
+   --link-hover:  #ff8000;
+   --form-color:linear-gradient(90deg, #0f0f0f90 0%, #1c1c1c9c 40%, #1c2b36a0 50%, #101820ac 60%, #283c48a8 80%, #1a1a1a9a 100%);
+   }
+   
+   

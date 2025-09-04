@@ -1,0 +1,176 @@
+{% extends "teacher/teacher_base.html" %}
+
+{% block title %}Teacher Dashboard - CBC-EDU Triad{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard_landing.css') }}">
+<style>
+
+.card-link {
+    color: #2563eb;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.card-link .fas {
+    margin-left: 0.6rem; /* Adjust the margin as needed */
+}
+  .quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .quick-action-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    background-color: #f8fafc;
+    color: #1e293b;
+    text-decoration: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+  }
+
+  .quick-action-item:hover {
+    background-color: #e0f2fe;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  .quick-action-item i {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    color: #2563eb;
+  }
+
+  .quick-action-item span {
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .quick-action-item:link,
+  .quick-action-item:visited {
+    text-decoration: none;
+  }
+
+  @media (max-width: 640px) {
+    .quick-actions-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block teacher_content %}
+<main class="dashboard-container">
+
+  <!-- Metric Cards -->
+  <section class="dashboard-cards">
+    <article class="card card-students">
+      <span class="card-icon">
+        <i class="fas fa-users-class"></i>
+      </span>
+      <h3 class="card-title">Active Classes</h3>
+      <p class="card-value">{{ class_count }}</p>
+      <p class="card-label">Classes currently managed</p>
+      <a href="{{ url_for('teacher.view_classes') }}" class="card-link">View Classes<i class="fas fa-arrow-right"></i>
+      </a>
+    </article>
+
+    <article class="card card-teachers">
+      <span class="card-icon">
+        <i class="fas fa-clipboard-check"></i>
+      </span>
+      <h3 class="card-title">Pending Assessments</h3>
+      <p class="card-value">{{ pending_assessments }}8</p>
+      <p class="card-label">To be reviewed</p>
+      <a href="{{ url_for('teacher.view_submissions') }}" class="card-link">Review<i class="fas fa-arrow-right"></i>
+</a>
+    </article>
+
+    <article class="card card-parents">
+      <span class="card-icon">
+        <i class="fas fa-tasks"></i>
+      </span>
+      <h3 class="card-title">Upcoming Tasks</h3>
+      <p class="card-value">{{ upcoming_tasks }}6</p>
+      <p class="card-label">Due soon</p>
+      <a href="{{ url_for('teacher.manage_tasks') }}" class="card-link">Manage Tasks<i class="fas fa-arrow-right"></i>
+</a>
+    </article>
+
+    <article class="card card-competencies">
+      <span class="card-icon">
+        <i class="fas fa-users"></i>
+      </span>
+      <h3 class="card-title">Groups</h3>
+      <p class="card-value">{{ groups_count }} 2</p>
+      <p class="card-label">Learning groups formed</p>
+      <a href="{{ url_for('teacher.manage_groups') }}" class="card-link" style="background-color: transparent;"> Manage Groups
+      <i class="fas fa-arrow-right"></i>
+        </a>
+    </article>
+  </section>
+
+  <!-- Secondary Sections -->
+  <section class="dashboard-sections">
+
+    <!-- Recent Activity -->
+    <article class="dashboard-section">
+      <header class="section-header">
+        <h3 class="section-title"><i class="fas fa-clock"></i> Recent Activity</h3>
+        <a href="#" class="section-action">View All</a>
+      </header>
+      <ul class="recent-activity-list">
+        <li class="activity-item">
+          <span class="activity-icon icon-blue"><i class="fas fa-tasks"></i></span>
+          <div class="activity-content">
+            <h4 class="activity-title">Task posted to Grade 6</h4>
+            <time class="activity-time">1 hour ago</time>
+          </div>
+        </li>
+        <li class="activity-item">
+          <span class="activity-icon icon-green"><i class="fas fa-check-circle"></i></span>
+          <div class="activity-content">
+            <h4 class="activity-title">Assessment completed for Project A</h4>
+            <time class="activity-time">Today</time>
+          </div>
+        </li>
+      </ul>
+    </article>
+
+    <!-- Quick Actions -->
+    <article class="dashboard-section">
+      <header class="section-header">
+        <h3 class="section-title"><i class="fas fa-bolt"></i> Quick Actions</h3>
+      </header>
+      <div class="quick-actions-grid">
+        <a href="#" class="quick-action-item">
+          <i class="fas fa-users-cog"></i>
+          <span>Create Group</span>
+        </a>
+        <a href="#" class="quick-action-item">
+          <i class="fas fa-plus-circle"></i>
+          <span>Create Task</span>
+        </a>
+        <a href="#" class="quick-action-item">
+          <i class="fas fa-marker"></i>
+          <span>Assess</span>
+        </a>
+        <a href="#" class="quick-action-item">
+          <i class="fas fa-user-circle"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+    </article>
+
+  </section>
+
+</main>
+{% endblock %}

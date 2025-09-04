@@ -1,0 +1,177 @@
+{% extends "student_base.html" %}
+
+{% block title %}Student Projects - CBC-EDU Triad{% endblock %}
+
+{% block content %}
+<div class="project-container">
+    <!-- Project List Section -->
+    <section class="project-list">
+        <h2>Your Projects</h2>
+        <div class="projects">
+            <!-- Fake data for projects (will be fetched from backend later) -->
+            <div class="project-item">
+                <h3>Science Project on Renewable Energy</h3>
+                <p><strong>Description:</strong> A project exploring solar and wind energy solutions.</p>
+                <p><strong>Submission Date:</strong> 2023-12-15</p>
+                <p><strong>Status:</strong> Pending Review</p>
+                <button class="btn-view-details">View Details</button>
+            </div>
+            <div class="project-item">
+                <h3>History of Computers Essay</h3>
+                <p><strong>Description:</strong> An essay on the evolution of computing technology.</p>
+                <p><strong>Submission Date:</strong> 2023-11-30</p>
+                <p><strong>Status:</strong> Feedback Provided</p>
+                <button class="btn-view-details">View Details</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Details Modal -->
+    <div id="project-details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 id="modal-project-title">Science Project on Renewable Energy</h2>
+            <p><strong>Description:</strong> <span id="modal-project-description">A project exploring solar and wind energy solutions.</span></p>
+            <p><strong>Submission Date:</strong> <span id="modal-submission-date">2023-12-15</span></p>
+            <p><strong>Status:</strong> <span id="modal-project-status">Pending Review</span></p>
+            <h3>Feedback</h3>
+            <div id="modal-feedback">
+                <p><strong>Teacher:</strong> Great work on the project! Keep it up.</p>
+                <p><strong>Parent:</strong> We're proud of your progress!</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    :root {
+        --bg-gradient: linear-gradient(90deg, #26c7c2 0%, #064546 100%);
+        --bg-gradient2: linear-gradient(90deg,#064546  0%,  #03908b 100%);
+        --bg-primary: #f7e8c8;
+        --bg-secondary: #3a47d5;
+        --bg-tertiary: #3a47d55e;
+        --accent-background: #ff8000;
+        --text-primary: #ffffff;
+        --text-secondary: #ff8000;
+        --text-tertiary: #2c2a2a;
+        --button-primary: #ff8000;
+        --button-secondary:#07ae0f;
+        --button-hover-opacity: 0.7;
+        --link-default:  #ffffff;
+        --link-hover:  #ff8000;
+        --border-color: #ff8000;
+        --form-color:rgba(12, 12, 116, 0.47);
+    }
+
+    .project-container {
+        padding: 20px;
+    }
+
+    .project-list {
+        background-color: var(--bg-primary);
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .project-item {
+        border-bottom: 1px solid var(--border-color);
+        padding: 15px 0;
+    }
+
+    .project-item h3 {
+        margin: 0;
+    }
+
+    .project-item p {
+        margin: 5px 0;
+    }
+
+    .btn-view-details {
+        background-color: var(--button-primary);
+        color: var(--text-primary);
+        border: none;
+        padding: 8px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .btn-view-details:hover {
+        background-color: var(--button-secondary);
+        opacity: var(--button-hover-opacity);
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+        background-color: var(--bg-primary);
+        margin: 10% auto;
+        padding: 20px;
+        border-radius: 8px;
+        width: 50%;
+    }
+
+    .close-modal {
+        float: right;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // JavaScript to handle modal functionality
+    const modal = document.getElementById("project-details-modal");
+    const closeModal = document.querySelector(".close-modal");
+
+    document.querySelectorAll(".btn-view-details").forEach(button => {
+        button.addEventListener("click", () => {
+            // Simulate fetching project details (replace with backend call later)
+            const projectDetails = {
+                title: "Science Project on Renewable Energy",
+                description: "A project exploring solar and wind energy solutions.",
+                submissionDate: "2023-12-15",
+                status: "Pending Review",
+                feedback: [
+                    { teacher: "Great work on the project! Keep it up." },
+                    { parent: "We're proud of your progress!" }
+                ]
+            };
+
+            document.getElementById("modal-project-title").innerText = projectDetails.title;
+            document.getElementById("modal-project-description").innerText = projectDetails.description;
+            document.getElementById("modal-submission-date").innerText = projectDetails.submissionDate;
+            document.getElementById("modal-project-status").innerText = projectDetails.status;
+
+            const feedbackHtml = projectDetails.feedback.map(f => `
+                <p><strong>${Object.keys(f)[0]}:</strong> ${Object.values(f)[0]}</p>
+            `).join("");
+            document.getElementById("modal-feedback").innerHTML = feedbackHtml;
+
+            modal.style.display = "block";
+        });
+    });
+
+    closeModal.addEventListener("click", () => {
+        modal.style.display = "none";
+    });
+
+    window.addEventListener("click", (event) => {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+</script>
+{% endblock %}

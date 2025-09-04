@@ -1,0 +1,277 @@
+{% extends "teacher/teacher_base.html" %}
+
+{% block teacher_content %}
+<div class="assessment-container">
+    <div class="submission-header">
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <h2 class="mb-2">
+                    <i class="fas fa-clipboard-check me-2"></i>
+                    Assess: {{ submission[2] }}
+                </h2>
+                <p class="mb-1"><strong>Competency:</strong> {{ submission[7] }}</p>
+                {% if submission[8] %}
+                <p class="mb-1"><strong>Group:</strong> {{ submission[9] }}</p>
+                {% endif %}
+                <p class="mb-1"><strong>Submitted:</strong> {{ submission[3].strftime('%Y-%m-%d %H:%M') }}</p>
+                {% if submission[4] %}
+                <p class="text-danger mb-1"><strong>Late Submission</strong></p>
+                {% endif %}
+            </div>
+            {% if file_url %}
+            <a href="{{ file_url }}" class="file-download-btn" download="{{ filename }}">
+                <i class="fas fa-file-download"></i>
+                Download Submission
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <form method="POST" id="assessmentForm">
+        {% if students|length > 1 %}
+        <div class="student-selector mb-4">
+            <h5 class="mb-3">Select Student to Assess</h5>
+            <div class="btn-group-vertical w-100" role="group">
+                {% for student in students %}
+                <button type="button" class="btn btn-outline-primary text-start student-btn {% if loop.first %}active{% endif %}" data-student-id="{{ student[0] }}">
+                    {{ student[1] }} {% if submission[10] == student[0] %}<small>(Submitter)</small>{% endif %}
+                </button>
+                {% endfor %}
+            </div>
+            <input type="hidden" name="student_id" id="selected_student_id" value="{{ students[0][0] }}" required>
+        </div>
+        {% else %}
+        <input type="hidden" name="student_id" value="{{ students[0][0] }}">
+        <div class="alert alert-info mb-4">
+            Assessing: <strong>{{ students[0][1] }}</strong> {% if submission[10] == students[0][0] %}<small>(Submitter)</small>{% endif %}
+        </div>
+        {% endif %}
+
+        {% for criteria in criteria_list %}
+        <details class="criteria-section mb-3">
+            <summary><strong>{{ criteria[1] }}</strong> – {{ criteria[2] }}</summary>
+            <div class="criteria-content mt-3">
+                <div class="performance-options mb-3">
+                    {% for level in performance_levels[criteria[0]] %}
+                    <label class="performance-option">
+                        <input type="radio" name="criteria_{{ criteria[0] }}" value="{{ level[0] }}" required {% if loop.first %}data-default-score="{{ level[2] }}"{% endif %}>
+                        <div>
+                            <strong>{{ level[1] }}</strong> ({{ level[2] }} pts)
+                            {% if level[3] %}
+                            <div class="text-muted small mt-1">{{ level[3] }}</div>
+                            {% endif %}
+                        </div>
+                    </label>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    <label for="feedback_{{ criteria[0] }}">Specific Feedback:</label>
+                    <textarea class="form-control feedback-textarea" id="feedback_{{ criteria[0] }}" name="feedback_{{ criteria[0] }}" rows="2" placeholder="Add specific feedback..."></textarea>
+                </div>
+            </div>
+        </details>
+        {% endfor %}
+
+        <div class="form-group mb-4">
+            <label for="general_feedback">General Feedback:</label>
+            <textarea class="form-control feedback-textarea" id="general_feedback" name="general_feedback" rows="3" placeholder="Overall feedback..."></textarea>
+        </div>
+
+        <div class="button-row">
+            <a href="{{ url_for('teacher.view_submissions') }}" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Submissions
+
+            </a>
+            <div>
+                <span id="estimatedScore" class="me-3 text-success fw-bold">Estimated score: --</span>
+                <button type="submit" class="btn btn-primary save-btn">
+                    <i class="fas fa-save me-1"></i> Save Assessment
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+    .assessment-container {
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+    }
+    .submission-header {
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+    }
+    .criteria-section summary {
+        cursor: pointer;
+        font-weight: 600;
+        padding: 0.75rem;
+        background: #f0f4f8;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+    }
+    .criteria-content {
+        border: 1px solid #ccc;
+        border-top: none;
+        border-radius: 0 0 8px 8px;
+        padding: 1rem;
+        background-color: #fafafa;
+    }
+    .performance-options {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+    .performance-option {
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 0.75rem;
+        cursor: pointer;
+        transition: background 0.2s ease;
+        display: flex;
+        gap: 0.5rem;
+    }
+    .performance-option:hover {
+        background-color: #f1faff;
+    }
+    .performance-option input[type="radio"] {
+        margin-right: 0.5rem;
+    }
+    .file-download-btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        background: #e3f2fd;
+        color: #1565c0;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background 0.2s;
+    }
+    .file-download-btn:hover {
+        background: #bbdefb;
+    }
+    .back-btn, .save-btn {
+        padding: 0.5rem 1.25rem;
+        font-weight: 500;
+        border-radius: 6px;
+
+    }
+
+    .back-btn{
+        background: rgba(255, 111, 1, 0.915);
+        text-decoration: none;
+        color: #ffff;
+        
+    }
+    .save-btn {
+        background-color: #007bff;
+        border: none;
+        color: white;
+    }
+    .save-btn:hover {
+        background-color: #0056b3;
+    }
+    .student-btn.active {
+        background-color: #dbe9ff;
+        border-color: #4e73df;
+    }
+    .feedback-textarea {
+        width: 95%;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        padding: 0.5rem 0.75rem;
+        resize: vertical;
+        transition: border-color 0.2s ease;
+    }
+    .feedback-textarea:focus {
+        border-color: #4e73df;
+        outline: none;
+        box-shadow: 0 0 0 0.1rem rgba(78, 115, 223, 0.25);
+    }
+
+    .button-row{
+        display: flex;
+        justify-content: space-between;
+         gap: 1rem;
+        flex-wrap: wrap-reverse;
+        padding: 1rem;
+    }
+
+    @media screen and (max-width:768px) {
+        .save-btn,.back-btn{
+        flex: 1;
+        width: 98%;
+
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.student-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.student-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById('selected_student_id').value = this.dataset.studentId;
+            });
+        });
+
+        document.querySelectorAll('.performance-option').forEach(option => {
+            option.addEventListener('click', function () {
+                const radio = this.querySelector('input[type="radio"]');
+                if (radio) {
+                    this.closest('.performance-options').querySelectorAll('.performance-option').forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    radio.checked = true;
+                    calculateEstimatedScore();
+                }
+            });
+
+            const radio = option.querySelector('input[type="radio"]');
+            if (radio && radio.hasAttribute('data-default-score')) {
+                radio.checked = true;
+                option.classList.add('selected');
+            }
+        });
+
+        function calculateEstimatedScore() {
+            let totalScore = 0;
+            let count = 0;
+            document.querySelectorAll('.performance-options').forEach(group => {
+                const selected = group.querySelector('input:checked');
+                if (selected) {
+                    const match = selected.closest('.performance-option').textContent.match(/\((\d+(\.\d+)?) pts\)/);
+                    if (match) {
+                        totalScore += parseFloat(match[1]);
+                        count++;
+                    }
+                }
+            });
+            const avg = count ? (totalScore / count).toFixed(1) : '--';
+            document.getElementById('estimatedScore').textContent = 'Estimated score: ' + avg;
+        }
+
+        calculateEstimatedScore();
+
+        document.getElementById('assessmentForm').addEventListener('submit', function (e) {
+            let valid = true;
+            let errors = [];
+            document.querySelectorAll('.performance-options').forEach(group => {
+                if (!group.querySelector('input:checked')) {
+                    const summary = group.closest('details').querySelector('summary').textContent;
+                    errors.push(summary.trim());
+                    valid = false;
+                }
+            });
+            if (!valid) {
+                e.preventDefault();
+                alert('Please select a performance level for:\n\n• ' + errors.join('\n• '));
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CBC-EDU Triad{% endblock %}</title>
+    <!-- Add Font Awesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Link for Google Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Link to font family -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Base CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/colors.css') }}">
+    <!-- Block for additional CSS -->
+    {% block styles %}{% endblock %}
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loader">
+        <img src="{{ url_for('static', filename='images/logo-removebg-preview.png') }}" alt="Loading Logo">
+        <p>Loading...</p>
+        <div class="dots">
+            <span class="dot">•</span>
+            <span class="dot">•</span>
+            <span class="dot">•</span>
+        </div>
+    </div>
+
+    <!-- Main Content (Initially Hidden) -->
+    <div id="content" class="hidden">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <img src="{{ url_for('static', filename='images/logo-removebg-preview.png') }}" alt="logo-img">
+                <h2>EDU-Triad</h2>
+            </div>
+
+            <!-- Hamburger menu button -->
+            <button class="Hamburger-menu-btn" id="Hamburger-menu-btn" aria-label="Menu">&#8942;&#8942;&#8942;</button>
+
+            <!-- Navigation menu -->
+            <nav class="nav" id="navbar">
+                <!-- Updated URLs with Blueprint names -->
+                <a href="{{ url_for('main.index') }}"><i class="fa fa-home"></i>Home</a>
+                <a href="{{ url_for('auth.student_login') }}"><i class="fa fa-user-graduate"></i>Student</a>
+                <a href="{{ url_for('auth.parent_login') }}"><i class="fa fa-user-friends"></i>Parent</a>
+                <a href="{{ url_for('auth.teacher_login') }}"><i class="fa fa-chalkboard-teacher"></i>Teacher</a>
+            </nav>
+
+            <!-- Switch for dark mode -->
+            <div class="switch">
+                <input type="checkbox" id="toggle-dark-mode">
+                <label for="toggle-dark-mode" class="slider">
+                    <i class="material-icons" id="sun">wb_sunny</i>
+                    <i class="material-icons" id="moon">nightlight_round</i>
+                </label>
+                <p>Toggle-Mode</p>
+            </div>
+        </header>
+
+        <br> <br>
+        <div class="test_dashboards" style="text-align: center; color:aliceblue;">
+            <!-- Updated URLs with Blueprint names -->
+            <a href="{{ url_for('student.student_dashboard') }}"style="color: rgb(255, 191, 0);"><i class="fa fa-chalkboard-teacher" style="color: rgb(255, 191, 0);"></i>student_dashboard</a> || 
+            <a href="{{ url_for('teacher.teachers_dashboard') }}" style="color: rgb(255, 191, 0);"><i class="fa fa-chalkboard-teacher" style="color: rgb(255, 191, 0);"  ></i>teachers_dashboard</a>||
+            <a href="{{ url_for('parent.parents_dashboard') }}"style="color: rgb(255, 191, 0);"><i class="fa fa-chalkboard-teacher" style="color: rgb(255, 191, 0);"></i>parents_dashboard</a>||
+         
+        </div>
+
+        <!-- Sidebar -->
+        <sidebar class="sidebar">
+            <!-- Updated URLs with Blueprint names -->
+            <a href="{{ url_for('main.about') }}" class="sidebar-link"><i class="fa fa-user"></i> About</a>
+            <a href="{{ url_for('main.features') }}" class="sidebar-link"><i class="fa fa-cogs"></i> Features</a>
+            <a href="#" class="sidebar-link"><i class="fa fa-envelope"></i> Contact</a>
+            <a href="#" class="sidebar-link"><i class="fa fa-user"></i> Am Admin</a>
+        </sidebar>
+
+        <!-- Main Content Block -->
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2025 CBC-EDU Triad || Designed by wamilimo <br> <a href="#privacy">Privacy Policy</a> | <a href="#terms">Terms of Use</a></p>
+        </footer>
+    </div>
+</body>
+</html>

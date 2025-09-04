@@ -1,0 +1,110 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Email Verification - CBC-EDU Triad{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/colors.css') }}">
+
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .content {
+            background: var(--bg-gradient);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 8px var(--box-shadow-color);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+      
+.flash-messages {
+    width: 90%;
+    max-width: 400px;
+    z-index: 1000;
+    text-align: center;
+}
+
+.flash {
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    color: var(--text-primary);
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    opacity: 0.95;
+    animation: fadeOut 15s ease-in-out forwards;
+}
+
+/* Flash message colors */
+.flash.success { background:var(--bg-success); } /* Green */
+.flash.danger { background:var(--bg-danger); } /* Red */
+.flash.warning { background-color: #ffc107; color: #333; } /* Yellow */
+.flash.info { background-color: #17a2b8; } /* Blue */
+
+.flash:hover {
+    opacity: 1;
+}
+
+/* Fade out after 5 seconds */
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+
+        .btn {
+            background-color: var(--accent-color);
+            color: var(--text-color);
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            font-weight: bold;
+            transition: opacity 0.3s;
+        }
+
+        .btn:hover {
+            opacity: var(--button-hover-opacity);
+        }
+
+        /* Media Query for responsiveness */
+        @media (max-width: 600px) {
+            .content {
+                padding: 20px;
+                width: 90%;
+            }
+
+            .btn {
+                width: 80%;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<main class="container">
+    <div class="content">
+        <!-- Display Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Button to Login -->
+        <a href="{{ url_for('auth.parent_login') }}" class="btn">Login</a>
+    </div>
+</main>
+{% endblock %}

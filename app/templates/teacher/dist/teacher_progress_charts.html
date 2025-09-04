@@ -1,0 +1,51 @@
+{% extends "teacher/teachers_base.html" %}
+
+{% block title %}Progress Charts - CBC-EDU Triad{% endblock %}
+
+{% block content %}
+<div class="charts-container">
+    <h2>Class Progress Charts</h2>
+    <div class="chart-cards">
+        <div class="card">
+            <h3>Overall Competency Scores</h3>
+            <p><strong>Average:</strong> 78%</p>
+        </div>
+        <div class="card">
+            <h3>Completed Projects</h3>
+            <p><strong>Total:</strong> 15</p>
+        </div>
+        <div class="card">
+            <h3>Pending Tasks</h3>
+            <p><strong>Total:</strong> 5</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .charts-container {
+        padding: 20px;
+    }
+
+    .chart-cards {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .card {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        flex: 1 1 calc(33.333% - 40px);
+        min-width: 250px;
+    }
+
+    .card h3 {
+        margin-top: 0;
+        color: #004d4d;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "student_base.html" %}
+
+{% block title %}Student Tasks - CBC-EDU Triad{% endblock %}
+
+{% block content %}
+<div class="tasks-container">
+    <h2>Your Assigned Tasks</h2>
+    <div class="task-list">
+        <!-- Hardcoded task details -->
+        <div class="task-item">
+            <h3>Create a science project on renewable energy.</h3>
+            <p><strong>Due Date:</strong> 2023-12-15</p>
+            <p><strong>Status:</strong> Pending</p>
+            <a href="{{ url_for('student.upload_project') }}" class="btn-upload-project">Upload Project</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .tasks-container {
+        padding: 20px;
+    }
+
+    .task-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .task-item {
+        background-color: var(--bg-primary);
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-upload-project {
+        background-color: var(--button-primary);
+        color: var(--text-primary);
+        padding: 8px 12px;
+        border-radius: 5px;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 10px;
+    }
+
+    .btn-upload-project:hover {
+        background-color: var(--button-secondary);
+        opacity: var(--button-hover-opacity);
+    }
+</style>
+{% endblock %}

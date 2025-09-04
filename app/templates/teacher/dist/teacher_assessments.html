@@ -1,0 +1,89 @@
+{% extends "teacher/teacher_base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Student Submissions for Assessment</h2>
+    
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form class="row g-3">
+                <div class="col-md-4">
+                    <select class="form-select" name="class_id">
+                        <option value="">All Classes</option>
+                        {% for class in classes %}
+                        <option value="{{ class[0] }}" {% if request.args.get('class_id') == class[0]|string %}selected{% endif %}>
+                            {{ class[1] }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" placeholder="Search by student or task..." 
+                           name="search" value="{{ request.args.get('search', '') }}">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-filter"></i> Filter
+                    </button>
+                </div>
+                <div class="col-md-2">
+                    <a href="{{ url_for('teacher.teacher_assessments') }}" class="btn btn-outline-secondary w-100">
+                        <i class="fas fa-sync-alt"></i> Reset
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if not submissions %}
+    <div class="alert alert-info">
+        No submissions found for assessment.
+    </div>
+    {% else %}
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Task Title</th>
+                    <th>Submitted By</th>
+                    <th>Class</th>
+                    <th>Submitted On</th>
+                    <th>File</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sub in submissions %}
+                <tr>
+                    <td>{{ sub[1] }}</td>
+                    <td>{{ sub[6] }}</td>
+                    <td>{{ sub[7] or 'N/A' }}</td>
+                    <td>{{ sub[3].strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>
+                        <a href="{{ url_for('static', filename=sub[8]) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-file-download"></i> {{ sub[8]|truncate(20) }}
+                        </a>
+                    </td>
+                    <td>
+                        <span class="badge {% if sub[5] == 'Pending' %}bg-warning{% else %}bg-success{% endif %}">
+                            {{ sub[5] }}
+                        </span>
+                        {% if sub[4] %}
+                        <span class="badge bg-danger ms-1">Late</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('teacher.assess_project', project_id=sub[0]) }}" 
+                           class="btn btn-sm {% if sub[5] == 'Pending' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                           {% if sub[5] == 'Pending' %}<i class="fas fa-clipboard-check"></i> Assess{% else %}<i class="fas fa-eye"></i> View{% endif %}
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

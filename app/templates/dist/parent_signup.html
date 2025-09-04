@@ -1,0 +1,46 @@
+<!-- app/templates/parent_signup.html -->
+{% extends "base.html" %}
+
+{% block title %}Parent Signup - CBC-EDU Triad{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="parent_main">
+    <div class="form-container">
+        <h2>Am a Parent? Register</h2>
+        <form action="" method="post">
+            <div class="input-group">
+                <input type="text" id="first_name" name="first_name" placeholder="Enter your First Name" required>
+                <label for="first_name">*First Name</label>
+            </div>
+            <div class="input-group">
+                <input type="text" id="last_name" name="last_name" placeholder="Enter your Last Name" required>
+                <label for="last_name">*Last Name</label>
+            </div>
+            <div class="input-group">
+                <input type="email" id="email" name="email" placeholder="Enter your Email" required>
+                <label for="email">*Email</label>
+            </div>
+            <div class="input-group">
+                <input type="text" id="phone" name="phone" placeholder="Enter your Phone Number" required>
+                <label for="phone">*Phone</label>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" name="password" placeholder="Enter password (min 4 & max 8 characters)" required>
+                <label for="password">*Password</label>
+            </div>
+            <div class="input-group">
+                <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm password" required>
+                <label for="confirm_password">*Confirm Password</label>
+            </div>
+            <button type="submit" class="form-button">
+                Sign Up <i class="fas fa-user-plus"></i> 
+            </button>
+        </form>
+        <p>Already have an account? <a href="{{ url_for('auth.parent_login') }}" class="forgotten-password"> <i class="fa fa-arrow-right"></i>Login</a></p>
+    </div>
+</main>
+{% endblock %}

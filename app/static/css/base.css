@@ -1,0 +1,367 @@
+/* General Styles */
+body {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background: var(--bg-gradient);
+}
+
+/* Center the loader */
+#loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-size: 20px;
+  color: #3498db;
+}
+
+/* Style the logo */
+#loader img {
+  width: 100px; /* Adjust size as needed */
+  margin-bottom: 10px;
+}
+
+/* Loading dots */
+.dots {
+  font-size: 6rem;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  animation: blink 1.5s infinite;
+}
+
+/* Blinking animation */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* Hide content initially */
+.hidden {
+  display: none;
+}
+
+header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px;
+    background:var(--bg-gradient);    
+}
+
+.logo{
+width: 30%;
+position:absolute;
+left: 20px;
+display: flex;
+}
+
+.logo img{
+    width: 20%;
+}
+
+.logo h2{
+    color: var(--text-primary);
+    margin-left: 10px;
+}
+
+
+.Hamburger-menu-btn {
+    background: none;
+    border: none;
+    color:var(--text-primary);
+    cursor: pointer;
+    font-size: 2.5rem;
+    font-weight: bolder;
+    border-radius:50% 50% 50% 0;
+    border-top: 3px solid var(--text-secondary);
+    border-bottom: 3px solid var(--text-secondary);
+    padding: 2px 10px;
+}
+
+.nav {
+    display: flex;
+    gap: 20px;
+    position: relative;
+    top: 2px;
+    right:0;
+    border-bottom: 2px solid  rgb(255, 116, 9); 
+}
+.nav a {
+    text-decoration: none;
+    color:var(--link-default);
+    padding: 10px 20px;
+    font-weight: bold;
+}
+
+.nav a:hover{
+    color:var(--link-hover);
+}
+
+
+
+nav i{
+    margin-right: 7px;
+}
+
+ 
+/* Toggle Switch Styles */
+.switch {
+  position: absolute;
+  top: 100px; /* You might want to adjust this for smaller screens */
+  right: 30px; /* You might want to adjust this for smaller screens */
+  display: inline-block;
+  width: 48px; /* Reduced width */
+  height: 27px; /* Reduced height */
+}
+
+.switch input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  background-color: var(--button-primary);
+  border-radius: 27px; /* Adjusted border-radius */
+  height: 100%;
+  width: 100%;
+  transition: 0.4s;
+}
+
+.slider:before {
+  content: "";
+  position: absolute;
+  height: 20px; /* Reduced height */
+  width: 20px; /* Reduced width */
+  left: 3px; /* Adjusted left */
+  bottom: 3px; /* Adjusted bottom */
+  background: var(--text-primary);
+  border-radius: 50%;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: rgb(255, 116, 9);
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px); /* Adjusted translateX */
+}
+
+#moon, #sun {
+  position: absolute;
+  color: #fff;
+  font-size: small; /* Reduced font size */
+}
+
+#sun {
+  left: 27px; /* Adjusted left */
+  top: 8px; /* Adjusted top */
+}
+
+#moon {
+  left: 4px; /* Adjusted left */
+  top: 6px; /* Adjusted top */
+}
+
+.switch p {
+  position: relative;
+  top: 20px; /* Adjusted top */
+  font-size: 0.5rem; /* Reduced font size */
+  color: var(--text-primary);
+}
+
+
+.sidebar{
+  background: var(--accent-background);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-around;
+  border-radius: 0 25px 25px 0;
+  width: 60%;
+  position: fixed;
+  transition: left 0.3s ease-in-out;
+  left:-108%; /* Hide sidebar initially */
+  z-index: 100;
+
+}
+
+.show-sidebar {
+  left: 0;
+}
+
+.close-btn {
+  position: absolute;
+  top: 5px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 2.5rem;
+  cursor: pointer;
+}
+
+
+
+.sidebar-link{
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  font-weight: bold;
+ 
+}
+
+
+.sidebar-link:hover{
+ padding:1rem;
+ background:var(--accent-background);
+}
+
+/*admin button link*/
+.hidden_admin_function{
+  background: var(--accent-background);
+  color: var(--text-color);
+  padding:0 0.5rem;
+  border-radius: 25px;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+    
+footer {
+    text-align: center;
+    padding: 10px;
+    background: var(--bg-gradient);
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    font-size: small;
+    border-top: 2px solid var(--accent-background);
+  }
+  
+  footer a {
+    text-decoration: none;
+    color: var(--link-default);
+  }
+  
+  footer a:hover {
+    color: var(--link-hover);
+  }
+
+  footer p{
+    color: var(--text-primary);
+  }
+  
+    
+  /* ANIMATIONS*/
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-5px); }
+}
+
+.shake {
+    animation: shake 0.5s ease-in-out 3; /* Shakes 3 times */
+}
+
+
+    /* Media Queries for responsiveness */
+    @media (max-width: 768px) {
+
+        .logo{
+            width: 70%;
+            position:absolute;
+            left: 5%;
+            top: 4%;
+            display: flex;
+            flex-wrap: wrap;
+            }
+            
+            .logo img{
+                width: 30%;
+            }
+          .logo h2{
+            font-size:large;
+          }
+      
+      
+        .nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            top: auto;
+            background:var(--bg-gradient);
+            justify-content: space-around;
+            align-items: center;
+            padding: 5px 2px;
+            height: fit-content;
+           border-top: 2px solid var(--button-primary);
+            border-bottom: none;
+            z-index: 100; 
+            gap: 0px; 
+            padding-right: 1rem; 
+                      }
+      
+      
+        nav a{
+        padding: 5px 2px !important;
+        flex-direction: column;
+        font-size: 1rem;
+        text-align:right;
+        }
+      
+        
+        .nav .fa {
+            font-size:larger;
+            margin-right:18px;
+        }
+      
+        .sidebar {
+        height: 100%;
+        width: 90%;
+  
+        top: 0;
+        flex-direction:column;
+       align-items: center;
+       background: var(--bg-gradient); 
+          
+      }
+
+      .sidebar-link{
+        width: 80%;
+        text-align: center;
+      }
+
+      /*admin button link*/
+.hidden_admin_function{
+  padding: 0.5rem 2rem;
+}
+           
+        footer{
+          padding-right: 0;
+        }
+      
+       
+      }
+      
+      
+      @media (max-width:228px) {
+        nav a{
+            font-size: 0.4rem !important;
+        }
+
+        /* Toggle Switch Styles */
+.switch {
+    top: 60px; /* You might want to adjust this for smaller screens */
+    right: 15px;
+  }
+      
+        .Hamburger-menu-btn,footer,.logo h2{
+            font-size: 0.6rem;
+          }
+      }
+      

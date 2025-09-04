@@ -1,0 +1,281 @@
+{% extends "student/student_base.html" %}
+
+{% block title %}Your Tasks - CBC-EDU Triad{% endblock %}
+
+{% block content %}
+<div class="tasks-container">
+    <h1>Your Assigned Tasks</h1>
+
+    <!-- Display Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+
+    {% if not tasks %}
+    <div class="no-tasks">
+        <p>You currently have no assigned tasks.</p>
+    </div>
+    {% endif %}
+
+    <div class="task-list">
+        {# 
+           task[0] = taskid
+           task[1] = title
+           task[2] = description
+           task[3] = duedate
+           task[4] = firstname
+           task[5] = lastname
+           task[6] = task_status
+           task[7] = is_late (boolean)
+        #}
+        {% for task in tasks %}
+        <div class="task-card {% if task[6] == 'Overdue' %}overdue{% elif task[6] == 'Submitted' %}submitted{% if task[7] %} late{% endif %}{% endif %}">
+            <div class="task-header">
+                <h3>{{ task[1] }}</h3>
+                <span class="status-badge">
+                    {% if task[6] == 'Submitted' and task[7] %}
+                        Late Submission
+                    {% else %}
+                        {{ task[6] }}
+                    {% endif %}
+                </span>
+            </div>
+
+            <div class="task-details">
+                <p><strong>Due:</strong> {{ task[3].strftime('%b %d, %Y') }}</p>
+                <p><strong>From:</strong> {{ task[4] }} {{ task[5] }}</p>
+
+                {% if task[2] %}
+                <div class="task-description">
+                    <p>{{ task[2] }}</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="task-actions">
+                {% if task[6] != 'Submitted' %}
+                <a href="{{ url_for('student.upload_project', task_id=task[0]) }}" 
+                   class="btn-submit">
+                   Submit Work
+                </a>
+                {% else %}
+                <span class="submitted-text">
+                    ✓ Submitted {% if task[7] %}(Late){% endif %}
+                </span>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .tasks-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1.5rem;
+        color: var(--text-tertiary);
+    }
+
+    .tasks-container h1 {
+        color: var(--text-tertiary);
+        margin-bottom: 1.5rem;
+    }
+
+    .no-tasks {
+        text-align: center;
+        padding: 2rem;
+        background-color: var(--bg-primary);
+        border-radius: 8px;
+        color: var(--text-tertiary);
+        font-size: 1rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        border: 1px solid var(--border-color);
+    }
+
+    .task-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.25rem;
+    }
+
+    .task-card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        padding: 1.25rem;
+        border-left: 4px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .task-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    .task-card.overdue {
+        border-left-color: var(--bg-danger);
+    }
+
+    .task-card.submitted {
+        border-left-color: var(--bg-success);
+    }
+
+    .task-card.submitted.late {
+        border-left-color: var(--warning);
+    }
+
+    .task-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 0.75rem;
+    }
+
+    .task-header h3 {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-tertiary);
+        line-height: 1.3;
+    }
+
+    .status-badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .task-card.overdue .status-badge {
+        background-color: var(--bg-danger);
+        color: var(--text-primary);
+    }
+
+    .task-card.submitted .status-badge {
+        background-color: var(--bg-success);
+        color: var(--text-primary);
+    }
+
+    .task-card.submitted.late .status-badge {
+        background-color: var(--warning);
+        color: var(--text-tertiary);
+    }
+
+    .task-card:not(.overdue):not(.submitted) .status-badge {
+        background-color: var(--bg-secondary);
+        color: var(--text-primary);
+    }
+
+    .task-details {
+        flex-grow: 1;
+    }
+
+    .task-details p {
+        margin: 0.25rem 0;
+        color: var(--text-tertiary);
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    .task-details strong {
+        color: var(--text-tertiary);
+    }
+
+    .task-description {
+        margin-top: 0.75rem;
+        color: var(--text-tertiary);
+        font-size: 0.875rem;
+    }
+
+    .task-actions {
+        margin-top: 1rem;
+    }
+
+    .btn-submit {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background-color: var(--button-primary);
+        color: var(--text-primary);
+        border-radius: 4px;
+        font-weight: 500;
+        font-size: 0.875rem;
+        text-decoration: none;
+        transition: background-color 0.15s ease, opacity 0.15s ease;
+    }
+
+    .btn-submit:hover {
+        opacity: var(--button-hover-opacity);
+    }
+
+    .submitted-text {
+        color: var(--bg-success);
+        font-weight: 500;
+        font-size: 0.875rem;
+    }
+
+    .submitted-text:has(+ .late-text) {
+        color: var(--warning);
+    }
+
+    /* Dark mode adjustments */
+    .dark-mode .task-card {
+        background-color: var(--bg-secondary);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .dark-mode .task-card h3,
+    .dark-mode .task-details p,
+    .dark-mode .task-description {
+        color: var(--text-primary);
+    }
+
+    .dark-mode .no-tasks {
+        background-color: var(--bg-secondary);
+        color: var(--text-primary);
+    }
+
+    @media (max-width: 576px) {
+        .task-list {
+            grid-template-columns: 1fr;
+        }
+        
+        .task-header {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .status-badge {
+            align-self: flex-start;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const taskCards = document.querySelectorAll('.task-card');
+
+        taskCards.forEach(card => {
+            card.addEventListener('click', function(e) {
+                if (e.target.tagName !== 'A') {
+                    this.classList.toggle('expanded');
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

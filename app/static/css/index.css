@@ -1,0 +1,101 @@
+/* app/static/css/index.css */
+.hero {
+    text-align: center;
+    padding: 50px 20px 20px 20px;
+    background: var(--bg-gradient);
+    height: fit-content;
+}
+
+.hero p {
+    color: var(--text-secondary);
+    font-weight: bold;
+    font-size: 1.4rem;
+}
+
+.typewriter {
+    font-size: 2rem;
+    color: var(--text-primary);
+    font-weight: bold;
+}
+
+.cta-buttons a{
+    margin: 0;
+    margin-bottom: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: var(--text-primary);
+    cursor: pointer;
+    text-decoration: none;
+
+}
+
+.cta-primary {
+    background: var(--button-primary);
+    border-radius: 20px 0 0 20px !important;
+
+}
+
+button:hover{
+    opacity: 0.7;
+}
+
+.cta-secondary {
+    background: var(--button-secondary);
+    border-radius: 0 20px  20px 0 !important;
+  
+}
+
+.features {
+    text-align: center;
+    padding: 30px 20px;
+    background: url(../images/student6.jpg) no-repeat center center/cover;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.feature-cards {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.card {
+    padding: 20px;
+    background: var(--bg-tertiary);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card h3 {
+    color: var(--text-secondary);
+}
+
+.card i {
+    font-size: 3rem;
+}
+
+
+
+    /* Media Queries for responsiveness */
+    @media (max-width: 768px) {       
+        .typewriter {
+            font-size: 1.5rem;
+          } 
+        .features {
+            border-radius: 0;
+        }
+      }
+      
+      @media (max-width:228px) {
+           
+        .typewriter,button{
+            font-size: 0.6rem;
+          }
+
+          .cta-buttons a{
+            font-size: x-small;
+            padding: 4px;
+          }
+      }

@@ -1,0 +1,189 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Manage Criteria - CBC-EDU Triad{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_manage.css') }}">
+{% endblock %}
+
+{% block admin_content %}
+<div class="manage-users">
+
+     <!-- Display Flash Messages -->
+ {% with messages = get_flashed_messages(with_categories=true) %}
+ {% if messages %}
+     <div class="flash-messages">
+         {% for category, message in messages %}
+             <div class="flash {{ category }}">{{ message }}</div>
+         {% endfor %}
+     </div>
+ {% endif %}
+ {% endwith %}
+ 
+    <h2>Manage Criteria</h2>
+    <a href="#" class="btn-add" data-modal="add-criteria-modal"><i class="fas fa-plus"></i> Add Criteria</a>
+
+    <div class="search-container">
+        <form action="" method="GET" class="search-wrapper">
+            <input type="text" id="search-input" name="query" placeholder="Search Criteria..." value="">
+            <button type="submit" id="search-button"><i class="fas fa-search"></i></button>
+        </form>
+    </div>
+
+    <table class="users-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Competency</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for criterion in criteria %}
+            <tr>
+                <td>{{ criterion[0] }}</td> <!-- CriteriaID -->
+                <td>{{ criterion[1] }}</td> <!-- CompetencyName -->
+                <td>{{ criterion[2] }}</td> <!-- CriteriaName -->
+                <td>{{ criterion[3] }}</td> <!-- CriteriaDescription -->
+                <td>
+                    <a href="#" class="btn-edit" data-modal="edit-criteria-modal" data-criteria-id="{{ criterion[0] }}">Edit</a>
+                    <a href="#" class="btn-delete" data-modal="delete-criteria-modal" data-criteria-id="{{ criterion[0] }}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Add Criteria Modal -->
+    <div id="add-criteria-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Add Criteria</h2>
+            <form id="add-criteria-form" action="{{ url_for('admin.add_criteria') }}" method="POST" class="auth-form">
+                <div class="input-group">
+                    <select id="competency-id" name="competency_id" required>
+                        <option value="">Select Competency</option>
+                        {% for competency in competencies %}
+                        <option value="{{ competency[0] }}">{{ competency[1] }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="competency-id">Competency</label>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="criteria-name" name="criteria_name" placeholder=" " required>
+                    <label for="criteria-name">Name</label>
+                </div>
+                <div class="input-group">
+                    <textarea id="criteria-description" name="criteria_description" placeholder=" " required></textarea>
+                    <label for="criteria-description">Description</label>
+                </div>
+                <button type="submit" class="form-button"><i class="fas fa-plus"></i> Add Criteria</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Criteria Modal -->
+    <div id="edit-criteria-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Edit Criteria</h2>
+            <form id="edit-criteria-form" action="{{ url_for('admin.edit_criteria') }}" method="POST" class="auth-form">
+                <input type="hidden" id="edit-criteria-id" name="criteria_id">
+                <div class="input-group">
+                    <select id="edit-competency-id" name="competency_id" required>
+                        {% for competency in competencies %}
+                        <option value="{{ competency[0] }}">{{ competency[1] }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="edit-competency-id">Competency</label>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="edit-criteria-name" name="criteria_name" placeholder=" " required>
+                    <label for="edit-criteria-name">Name</label>
+                </div>
+                <div class="input-group">
+                    <textarea id="edit-criteria-description" name="criteria_description" placeholder=" " required></textarea>
+                    <label for="edit-criteria-description">Description</label>
+                </div>
+                <button type="submit" class="form-button"><i class="fas fa-save"></i> Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Criteria Modal -->
+    <div id="delete-criteria-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Delete Criteria</h2>
+            <p>Are you sure you want to delete this criteria?</p>
+            <form id="delete-criteria-form" action="{{ url_for('admin.delete_criteria') }}" method="POST">
+                <input type="hidden" id="delete-criteria-id" name="criteria_id">
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel">Cancel</button>
+                    <button type="submit" class="btn-confirm-delete">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="overlay"></div>
+</div>
+
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const overlay = document.getElementById('overlay');
+
+        // Edit buttons
+        const editButtons = document.querySelectorAll('.btn-edit');
+        editButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const modalId = button.getAttribute('data-modal');
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    const criteriaId = button.getAttribute('data-criteria-id');
+                    fetchCriteriaDetails(criteriaId, modal);
+                    modal.style.display = 'block';
+                    overlay.style.display = 'block';
+                }
+            });
+        });
+
+        // Delete buttons
+        const deleteButtons = document.querySelectorAll('.btn-delete');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const modalId = button.getAttribute('data-modal');
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    const criteriaId = button.getAttribute('data-criteria-id');
+                    document.getElementById('delete-criteria-id').value = criteriaId;
+                    modal.style.display = 'block';
+                    overlay.style.display = 'block';
+                }
+            });
+        });
+
+        // Fetch criteria details
+        function fetchCriteriaDetails(criteriaId, modal) {
+            fetch(`/admin/get_criteria/${criteriaId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        console.error(data.error);
+                        return;
+                    }
+                    document.getElementById('edit-criteria-id').value = data.CriteriaID;
+                    document.getElementById('edit-competency-id').value = data.CompetencyID;
+                    document.getElementById('edit-criteria-name').value = data.CriteriaName;
+                    document.getElementById('edit-criteria-description').value = data.CriteriaDescription;
+                })
+                .catch(error => console.error('Error fetching criteria details:', error));
+        }
+    });
+</script>
+{% endblock %}

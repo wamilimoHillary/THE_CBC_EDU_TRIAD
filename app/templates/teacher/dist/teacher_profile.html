@@ -1,0 +1,35 @@
+{% extends "teacher/teachers_base.html" %}
+
+{% block title %}Profile - CBC-EDU Triad{% endblock %}
+
+{% block content %}
+{% block style %}
+<!--link to profiles styles-->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profiles.css') }}">
+{% endblock %}
+
+
+<div class="profile-container">
+    <div class="profile-header">
+        <h2>Profile</h2>
+    </div>
+    <div class="profile-card">
+        <div class="profile-avatar">
+            <img src="{{ url_for('static', filename='images/logo-removebg-preview.png') }}" alt="Profile_Pic">
+        </div>
+        <div class="profile-details">
+            <div class="detail-item"><strong>Full Name:</strong> Wamish Wamish</div>
+            <div class="detail-item"><strong>Email:</strong> wamie@example.com</div>
+            <div class="detail-item"><strong>Phone:</strong> +123 456 7890</div>
+            <div class="detail-item"><strong>Child's Name:</strong> wamie</div>
+        </div>
+    </div>
+    <div class="profile-actions">
+        <button class="btn-edit">Edit Profile</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "parents_base.html" %}
+
+{% block title %}Dashboard - CBC-EDU Triad{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h2>Child's Progress Overview</h2>
+    <div class="dashboard-metrics">
+        <div class="metric-card">
+            <strong>Overall Performance:</strong> 85%
+        </div>
+        <div class="metric-card">
+            <strong>Recent Project:</strong> Science Fair Model
+        </div>
+        <div class="metric-card">
+            <strong>Pending Feedback:</strong> 2 Comments
+        </div>
+    </div>
+    <button class="btn-view-details">View Details</button>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .dashboard-container {
+        padding: 20px;
+    }
+
+    .dashboard-metrics {
+        display: flex;
+        gap: 15px;
+    }
+
+    .metric-card {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        flex: 1;
+    }
+
+    .btn-view-details {
+        background-color: #004d4d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+
+    .btn-view-details:hover {
+        background-color: #ff7f00;
+    }
+</style>
+{% endblock %}

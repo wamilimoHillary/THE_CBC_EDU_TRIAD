@@ -1,0 +1,268 @@
+{% extends "teacher/teacher_base.html" %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_manage.css') }}">
+<style>
+.teacher_main {
+    background: url("{{ url_for('static', filename='images/student2.jpg') }}") no-repeat center/cover;
+    padding: 0.5rem;
+}
+
+.form-container {
+    max-width: 500px;
+    margin: 0 auto;
+    background: var(--form-color);
+    padding: 30px 40px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    color: var(--text-primary);
+    backdrop-filter: blur(10px);
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.input-group input,
+.input-group textarea,
+.input-group select {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 0 0 10px 10px;
+    border-bottom: 2px solid var(--border-color);
+    background: transparent;
+    outline: none;
+    font-size: 16px;
+    color: var(--text-primary);
+    transition: 0.3s;
+}
+
+.input-group input:focus,
+.input-group textarea:focus,
+.input-group select:focus {
+    border-bottom: 1.5px solid var(--text-secondary);
+    border-radius: 10px;
+}
+
+.input-group select:focus {
+    color: black;
+}
+
+.input-group label {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--text-primary);
+    background: transparent;
+    padding: 0 5px;
+    transition: 0.3s ease;
+    pointer-events: none;
+}
+
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label,
+.input-group textarea:focus + label,
+.input-group textarea:not(:placeholder-shown) + label,
+.input-group select:focus + label,
+.input-group select:not(:placeholder-shown) + label,
+.input-group select:-webkit-autofill + label {
+    top: -4px;
+    left: 0;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.input-group input::placeholder,
+.input-group textarea::placeholder {
+    visibility: hidden;
+}
+
+.input-group input:focus::placeholder,
+.input-group textarea:focus::placeholder {
+    visibility: visible;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.assign-container {
+    padding: 16px;
+    background: transparent;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+}
+
+.section-heading {
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: var(--text-primary);
+}
+
+.form-button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 25px;
+    background-color: var(--button-primary);
+    color: var(--text-tertiary);
+    font-size: 16px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.form-button:hover {
+    opacity: var(--button-hover-opacity);
+}
+
+
+.flash-messages {
+    width: 90%;
+    max-width: 400px;
+    z-index: 1000;
+    text-align: center;
+}
+
+.flash {
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    color: #fff;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    opacity: 0.95;
+    animation: fadeOut 15s ease-in-out forwards;
+}
+
+/* Flash message colors */
+.flash.success { background:var(--bg-success); } /* Green */
+.flash.danger { background:var(--bg-danger); } /* Red */
+.flash.warning { background-color: #ffc107; color: #333; } /* Yellow */
+.flash.info { background-color: #17a2b8; } /* Blue */
+
+.flash:hover {
+    opacity: 1;
+}
+
+/* Fade out after 5 seconds */
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+
+@media (max-width: 480px) {
+    .form-container {
+        padding: 20px;
+        max-width: 100%;
+    }
+}
+</style>
+{% endblock %}
+
+{% block teacher_content %}
+<main class="teacher_main">
+
+    
+        <!-- Display Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+        
+    <div class="form-container">
+
+
+        <h2>Assign Task</h2>
+        <form method="POST" action="{{ url_for('teacher.create_task') }}" id="taskForm">
+            <!-- Task Title -->
+            <div class="input-group">
+                <input type="text" id="taskTitle" name="title" placeholder=" " required>
+                <label for="taskTitle">Title</label>
+            </div>
+
+            <!-- Task Date -->
+            <div class="input-group">
+                <input type="date" id="taskDate" name="due_date" placeholder=" " required>
+                <label for="taskDate">Due Date</label>
+            </div>
+
+            
+
+            <!-- Task Description -->
+            <div class="input-group">
+                <textarea id="taskDescription" name="description" placeholder=" " required></textarea>
+                <label for="taskDescription">Description</label>
+            </div>
+
+            <!-- Assignment Options -->
+            <div class="assign-container">
+                <div class="section-heading">Assignment Options:Assigned to Who?</div>
+                
+                                <!-- Competency Selection -->
+                    <div class="input-group">
+                        <select id="competencyDropdown" name="competency_id" required>
+                            <option value="">Select Competency</option>
+                            {% for competency in competencies %}
+                            <option value="{{ competency[0] }}">{{ competency[1] }}</option>
+                            {% endfor %}
+                        </select>
+                        <label for="competencyDropdown">Competency <span style="color: red;">*</span></label>
+                    </div>
+
+
+                <!-- Student Selection -->
+                <div class="input-group">
+                    <select id="studentDropdown" name="student_id">
+                        <option value="">Select Student</option>
+                        {% for student in students %}
+                        <option value="{{ student[0] }}">{{ student[1] }} {{ student[2] }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="studentDropdown">Student</label>
+                </div>
+
+                <!-- Class Selection -->
+                <div class="input-group">
+                    <select id="classDropdown" name="class_id">
+                        <option value="">Select Class</option>
+                        {% for class in classes %}
+                        <option value="{{ class[0] }}">{{ class[1] }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="classDropdown">Class </label>
+                </div>
+
+                <!-- Group Selection -->
+                <div class="input-group">
+                    <select id="groupDropdown" name="group_id">
+                        <option value="">Select Group</option>
+                        {% for group in groups %}
+                        <option value="{{ group[0] }}">{{ group[1] }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="groupDropdown">Group</label>
+                </div>
+            </div>
+
+            <button class="form-button" type="submit">Assign Task</button>
+        </form>
+    </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+{% endblock %}

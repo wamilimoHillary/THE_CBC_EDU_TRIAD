@@ -1,0 +1,50 @@
+{% extends "student/student_base.html" %}
+
+{% block title %}Reports - CBC-EDU Triad{% endblock %}
+
+{% block content %}
+<div class="reports-container">
+    <h2>Your Reports</h2>
+    <div class="report">
+        <h3>Science Project Report</h3>
+        <p><strong>Date:</strong> 2023-10-30</p>
+        <a href="#" class="btn-download">Download Report</a>
+    </div>
+    <div class="report">
+        <h3>Mathematics Progress Report</h3>
+        <p><strong>Date:</strong> 2023-11-05</p>
+        <a href="#" class="btn-download">Download Report</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .reports-container {
+        padding: 20px;
+    }
+
+    .report {
+        background-color: var(--bg-primary);
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .btn-download {
+        background-color: var(--button-primary);
+        color: var(--text-primary);
+        padding: 8px 12px;
+        border-radius: 5px;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 10px;
+    }
+
+    .btn-download:hover {
+        background-color: var(--button-secondary);
+        opacity: var(--button-hover-opacity);
+    }
+</style>
+{% endblock %}

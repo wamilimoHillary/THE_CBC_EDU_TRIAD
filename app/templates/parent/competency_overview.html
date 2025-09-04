@@ -1,0 +1,346 @@
+{% extends 'parent/parents_base.html' %}
+
+{% block content %}
+
+<br><br>
+<div class="competency-container">
+    <div class="competency-card">
+        <div class="competency-header">
+            <h5><span class="icon">📊</span>My Student Competency</h5>
+
+            <!-- Display Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% endwith %}
+            
+            <!-- Child Selection -->
+            <div class="child-selector"> 
+                <form method="GET" action="{{ url_for('parent.competency_overview') }}">
+                    <select name="student_id" onchange="this.form.submit()" class="form-select">
+                        <option value="">-- Select Child --</option>
+                        {% for child in children %}
+                        <option value="{{ child[0] }}" 
+                            {% if selected_child and child[0] == selected_child.studentid %}selected{% endif %}>
+                            {{ child[1] }} {{ child[2] }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+        </div>
+        
+        <div class="competency-body">
+            {% if not assessments %}
+            <div class="empty-feedback">No assessment results available yet.</div>
+            {% else %}
+            <!-- Add Search/Filter Section -->
+            <div class="search-filter">
+                <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search by task or competency..." class="search-input">
+                <select id="scoreFilter" onchange="filterTable()" class="filter-select">
+                    <option value="">All Scores</option>
+                    <option value="80">High (80-100%)</option>
+                    <option value="50">Medium (50-79%)</option>
+                    <option value="0">Low (0-49%)</option>
+                </select>
+            </div>
+            
+            <div class="table-wrap">
+                <table class="competency-table" id="competencyTable">
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Competency</th>
+                            <th>Score</th>
+                            <th>Feedback Summary</th>
+                            <th>Assessed At</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for assessment in assessments %}
+                        <tr>
+                            <td>{{ assessment[1] }}</td>
+                            <td>{{ assessment[2] }}</td>
+                            <td>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar 
+                                        {% if assessment[3] >= 80 %}green
+                                        {% elif assessment[3] >= 50 %}yellow
+                                        {% else %}red{% endif %}" 
+                                      style="width: {{ assessment[3] }}%">
+                                        {{ assessment[3] }}%
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                {% if assessment[4] %}
+                                    {{ assessment[4][:50] }}{% if assessment[4]|length > 50 %}...{% endif %}
+                                {% else %}
+                                    <span class="no-feedback">No feedback</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ assessment[5].strftime('%b %d, %Y') }}</td>
+                            <td>
+                                <a href="{{ url_for('parent.criteria_feedback', assessment_id=assessment[0]) }}" class="action-link">
+                                    Breakdown
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+   /* Competency Container */
+.competency-container {
+    width: 100%;
+    max-width: 100vw; /* Prevents overflow beyond screen */
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    padding-right:2rem ;
+}
+
+/* Card */
+.competency-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* Header */
+.competency-header {
+    background: #064546;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    flex-wrap: wrap; /* allow wrapping on small screens */
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.competency-header h5 {
+    margin: 0;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+}
+
+.competency-header .icon {
+    margin-right: 10px;
+}
+
+.child-selector {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: auto;
+    flex-grow: 1;
+}
+
+.form-select {
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    max-width: 100%;
+}
+
+/* Search/Filter Styles */
+.search-filter {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.search-input {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    flex-grow: 1;
+    min-width: 200px;
+}
+
+.filter-select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+}
+
+/* Body */
+.competency-body {
+    padding: 20px;
+    overflow-x: auto;
+}
+
+.empty-feedback {
+    background: #eef;
+    padding: 10px;
+    border: 1px dashed #99c;
+    border-radius: 4px;
+    text-align: center;
+}
+
+/* Table */
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.competency-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 100%;
+}
+
+.competency-table th,
+.competency-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.competency-table th {
+    background: #f8f8f8;
+}
+
+/* Progress Bar */
+.progress-bar-container {
+    background: #eee;
+    border-radius: 4px;
+    height: 20px;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-bar {
+    height: 100%;
+    color: white;
+    text-align: center;
+    font-size: 12px;
+    line-height: 20px;
+}
+
+.green { background: #28a745; }
+.yellow { background: #ffc107; color: black; }
+.red { background: #dc3545; }
+
+.no-feedback {
+    color: #888;
+    font-style: italic;
+}
+
+.action-link {
+    background: #0074cc;
+    color: white;
+    padding: 6px 10px;
+    font-size: 13px;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.action-link:hover {
+    background: #005a9c;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .competency-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .competency-table th,
+    .competency-table td {
+        font-size: 13px;
+        padding: 6px;
+    }
+
+    .competency-table {
+        min-width: 600px; /* Keep scrolling behavior */
+    }
+
+    .action-link {
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+
+    .competency-body {
+        padding: 10px;
+    }
+    
+    .search-filter {
+        flex-direction: column;
+    }
+}
+
+body{
+    overflow-x: hidden!important;
+}
+</style>
+
+<script>
+function filterTable() {
+    // Get input values
+    const searchText = document.getElementById('searchInput').value.toLowerCase();
+    const scoreFilter = document.getElementById('scoreFilter').value;
+    
+    // Get table rows
+    const table = document.getElementById('competencyTable');
+    const rows = table.getElementsByTagName('tr');
+    
+    // Loop through all rows (skip header row)
+    for (let i = 1; i < rows.length; i++) {
+        const row = rows[i];
+        const cells = row.getElementsByTagName('td');
+        const task = cells[0].textContent.toLowerCase();
+        const competency = cells[1].textContent.toLowerCase();
+        const scoreText = cells[2].textContent;
+        const score = parseFloat(scoreText);
+        
+        // Check search text against task and competency
+        const textMatch = task.includes(searchText) || competency.includes(searchText);
+        
+        // Check score filter
+        let scoreMatch = true;
+        if (scoreFilter) {
+            const minScore = parseInt(scoreFilter);
+            if (minScore === 80) {
+                scoreMatch = score >= 80;
+            } else if (minScore === 50) {
+                scoreMatch = score >= 50 && score < 80;
+            } else if (minScore === 0) {
+                scoreMatch = score < 50;
+            }
+        }
+        
+        // Show/hide row based on matches
+        if (textMatch && scoreMatch) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    }
+}
+</script>
+
+{% endblock %}

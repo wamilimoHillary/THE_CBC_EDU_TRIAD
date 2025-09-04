@@ -1,0 +1,273 @@
+<!-- templates/admin/manage_parents.html -->
+{% extends "admin/admin_base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_manage.css') }}">
+{% endblock %}
+
+{% block admin_content %}
+<div class="manage-users">
+    <!-- Display Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+
+    <div class="contain-head">
+        <h2>Manage Parents</h2>
+    </div>
+
+    <!-- Search Container -->
+    <div class="search-container">
+        <form action="{{ url_for('admin.search_parents') }}" method="GET" class="search-wrapper">
+            <input type="text" id="search-input" name="query" placeholder="Search parents..." value="{{ request.args.get('query', '') }}">
+            <button type="submit" id="search-button"><i class="fas fa-search"></i></button>
+        </form>
+        
+        <div class="search-filters">
+            <div class="filter-group">
+                <label for="role">Role:</label>
+                <select id="role">
+                    <option value="all">All Roles</option>
+                    <option value="admin">Admin</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="student">Student</option>
+                    <option value="parent">Parent</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="status">Status:</label>
+                <select id="status">
+                    <option value="all">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+            <button id="advanced-search-toggle">Advanced Filters</button>
+        </div>
+    
+        <!-- Advanced Filters Section -->
+        <div id="advanced-filters" class="advanced-filters" style="display: none;">
+            <div class="filter-group">
+                <label for="join-date">Join Date:</label>
+                <input type="date" id="join-date">
+            </div>
+            <div class="filter-group">
+                <label for="last-login">Last Login:</label>
+                <input type="date" id="last-login">
+            </div>
+            <div class="filter-group">
+                <label for="account-type">Account Type:</label>
+                <select id="account-type">
+                    <option value="all">All Types</option>
+                    <option value="free">Free</option>
+                    <option value="premium">Premium</option>
+                    <option value="trial">Trial</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="email-verified">Email Verified:</label>
+                <select id="email-verified">
+                    <option value="all">All</option>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table Wrapper for Responsiveness -->
+    <div class="table-responsive">
+        <!-- Parents Table -->
+        <table class="users-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Join Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for parent in parents %}
+                <tr>
+                    <td>{{ parent[0] }}</td> <!-- UserID -->
+                    <td>{{ parent[1] }} {{ parent[2] }}</td> <!-- FirstName, LastName -->
+                    <td>{{ parent[3] }}</td> <!-- Email -->
+                    <td>{{ parent[4] }}</td> <!-- Phone -->
+                    <td>{{ parent[5] }}</td> <!-- Join Date -->
+                    <td>
+                        <!-- Use UserID for data-parent-id -->
+                        <a href="#" class="btn-edit" data-modal="edit-parent-modal" data-parent-id="{{ parent[0] }}">Edit</a>
+                        <a href="#" class="btn-delete" data-modal="delete-parent-modal" data-parent-id="{{ parent[0] }}">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<!-- Edit Parent Modal -->
+<div id="edit-parent-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Edit Parent</h2>
+        <form id="edit-parent-form" action="{{ url_for('admin.edit_parent') }}" method="POST" class="auth-form">
+            <input type="hidden" id="edit-parent-id" name="parent_id">
+            <div class="input-group">
+                <input type="text" id="edit-first-name" name="first-name" placeholder=" " required>
+                <label for="edit-first-name">First Name</label>
+            </div>
+            <div class="input-group">
+                <input type="text" id="edit-last-name" name="last-name" placeholder=" " required>
+                <label for="edit-last-name">Last Name</label>
+            </div>
+            <div class="input-group">
+                <input type="email" id="edit-email" name="email" placeholder=" " required>
+                <label for="edit-email">Email</label>
+            </div>
+            <div class="input-group">
+                <input type="text" id="edit-phone" name="phone" placeholder=" " required>
+                <label for="edit-phone">Phone</label>
+            </div>
+            <div class="input-group">
+                <label for="edit-is-active">Account Status:</label> <br> <br>
+                <select id="edit-is-active" name="is_active" required style="width: 80%;">
+                    <option value="true">Activate</option>
+                    <option value="false">Deactivate</option>
+                </select>
+            </div>
+            <button type="submit" class="form-button"><i class="fas fa-save"></i> Save Changes</button>
+        </form>
+    </div>
+</div>
+
+<!-- Delete Parent Modal -->
+<div id="delete-parent-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Delete Parent</h2>
+        <p>Are you sure you want to delete this parent?</p>
+        <form id="delete-parent-form" action="{{ url_for('admin.delete_parent') }}" method="POST">
+            <input type="hidden" id="delete-parent-id" name="parent_id">
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel">Cancel</button>
+                <!-- Use a unique class name for the delete button -->
+                <button type="submit" class="btn-confirm-delete">Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+ <!-- Overlay -->
+ <div id="overlay"></div>
+</div>
+
+<script>
+   document.addEventListener('DOMContentLoaded', function () {
+    const overlay = document.getElementById('overlay');
+
+    // Add event listeners for Edit buttons
+    const editButtons = document.querySelectorAll('.btn-edit');
+    editButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            const modalId = button.getAttribute('data-modal');
+            const modal = document.getElementById(modalId);
+
+            if (modal) {
+                const parentId = button.getAttribute('data-parent-id');
+                fetchParentDetails(parentId, modal);
+                modal.style.display = 'block';
+                overlay.style.display = 'block';
+            }
+        });
+    });
+
+    // Add event listeners for Delete buttons
+    const deleteButtons = document.querySelectorAll('.btn-delete');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            const modalId = button.getAttribute('data-modal');
+            const modal = document.getElementById(modalId);
+
+            if (modal) {
+                const parentId = button.getAttribute('data-parent-id');
+                document.getElementById('delete-parent-id').value = parentId;
+                modal.style.display = 'block';
+                overlay.style.display = 'block';
+            }
+        });
+    });
+
+    // Close modal when Cancel button is clicked
+    const cancelButtons = document.querySelectorAll('.btn-cancel');
+    cancelButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const modal = button.closest('.modal');
+            if (modal) {
+                modal.style.display = 'none';
+                overlay.style.display = 'none';
+            }
+        });
+    });
+
+    // Close modal when the overlay is clicked
+    overlay.addEventListener('click', () => {
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => {
+            modal.style.display = 'none';
+        });
+        overlay.style.display = 'none';
+    });
+
+    // Function to fetch parent details for editing
+    function fetchParentDetails(parentId, modal) {
+        fetch(`/admin/get_parent/${parentId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error(data.error);
+                    return;
+                }
+
+                // Populate the form fields with the fetched data
+                document.getElementById('edit-parent-id').value = data.UserID;
+                document.getElementById('edit-first-name').value = data.FirstName;
+                document.getElementById('edit-last-name').value = data.LastName;
+                document.getElementById('edit-email').value = data.Email;
+                document.getElementById('edit-phone').value = data.Phone;
+                document.getElementById('edit-is-active').value = data.is_active; // Set dropdown value
+            })
+            .catch(error => console.error('Error fetching parent details:', error));
+    }
+
+    // Close modal when the close button is clicked
+    const closeButtons = document.querySelectorAll('.close-modal');
+    closeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const modal = button.closest('.modal');
+            if (modal) {
+                modal.style.display = 'none';
+                overlay.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
+
+
+{% endblock %}

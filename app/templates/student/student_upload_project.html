@@ -1,0 +1,136 @@
+{% extends "student/student_base.html" %}
+
+{% block content %}
+<div class="upload-container">
+  <h2>Submit Work: {{ task[1] }}</h2>
+
+  <!-- Display Flash Messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+      <div class="flash-messages">
+          {% for category, message in messages %}
+              <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+      </div>
+  {% endif %}
+  {% endwith %}
+
+  {% if group %}
+  <div class="group-alert">
+    <i class="fas fa-users"></i> Submitting for <strong>{{ group[1] }}</strong>
+  </div>
+  {% endif %}
+
+  <div class="due-date-notice">
+    <i class="fas fa-calendar-alt"></i> 
+    Due: {{ task[3].strftime('%B %d, %Y') }}
+    {% if current_datetime.date() > task[3] %}
+      <span class="late-warning">(Late submission - marks may be deducted)</span>
+    {% endif %}
+  </div>
+
+  <form method="POST" enctype="multipart/form-data" class="upload-form">
+    <div class="form-group">
+      <label for="project_file">Select File:</label>
+      <input type="file" id="project_file" name="project_file" required
+             accept=".pdf,.doc,.docx,.ppt,.pptx,.zip,.rar,.7z,.txt,.jpg,.jpeg,.png">
+      <p class="file-help">Accepted formats: PDF, DOC, PPT, ZIP, JPG, PNG (Max 20MB)</p>
+    </div>
+    
+    <button type="submit" class="btn-submit">
+      <i class="fas fa-upload"></i> Submit
+    </button>
+  </form>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+.upload-container {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.group-alert {
+  background: #f0f8ff;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border-left: 4px solid #3498db;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.due-date-notice {
+  background: #fffaf0;
+  padding: 0.75rem;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #ffa500;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.due-date-notice .late-warning {
+  color: #d9534f;
+  font-weight: bold;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+input[type="file"] {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #f9f9f9;
+}
+
+.file-help {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+.btn-submit {
+  background: #2c5f07;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: background 0.2s;
+}
+
+.btn-submit:hover {
+  background: var(--button-primary);
+}
+</style>
+{% endblock %}

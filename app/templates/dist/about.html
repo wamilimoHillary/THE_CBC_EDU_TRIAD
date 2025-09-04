@@ -1,0 +1,23 @@
+<!-- app/templates/about.html -->
+{% extends "base.html" %}
+
+{% block title %}About - CBC-EDU Triad{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+{% endblock %}
+
+{% block content %}
+<section style="text-align: center; color: aliceblue; height:80vh;">
+    <h1>About Us</h1>
+    <p style="text-align: center; color: aliceblue;">Chill to be implemented</p>
+
+    <!-- Display Roles Dynamically -->
+    <h2>Roles in the System</h2>
+    <ul style="list-style-type: none; padding: 0;">
+        {% for role in roles %}
+            <li style="color: aliceblue;">{{ role[1] }}</li>  <!-- role[1] corresponds to RoleName -->
+        {% endfor %}
+    </ul>
+</section>
+{% endblock %}

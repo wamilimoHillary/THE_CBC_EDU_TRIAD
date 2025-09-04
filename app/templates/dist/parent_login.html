@@ -1,0 +1,36 @@
+<!-- app/templates/parent_login.html -->
+{% extends "base.html" %}
+
+{% block title %}Parent Login - CBC-EDU Triad{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="parent_main">
+    <div class="form-container">
+        <h2>Parent Log In</h2>
+        <form action="{{ url_for('auth.parent_login') }}" method="post">
+            <div class="input-group">
+                <input type="text" id="email" name="email" placeholder="Enter your Email or Phone" required>
+                <label for="email">*Email or Phone</label>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" name="password" placeholder="Enter password (min 4 & max 8 characters)" required>
+                <label for="password">*Password</label>
+            </div>
+            <div class="remember-forget-container">
+                <a href="{{ url_for('auth.forgot_password') }}" class="forgot-password">
+                    <i class="fa fa-key"></i>Forgot password?
+                </a>
+            </div>
+            <hr>
+            <button type="submit" class="form-button">
+                Login <i class="fas fa-sign-in-alt"></i> 
+            </button>
+        </form>
+        <p>Have NO account? <a href="{{ url_for('auth.parent_signup') }}" class="forgotten-password"> <i class="fa fa-arrow-right"></i>Register</a></p>
+    </div>
+</main>
+{% endblock %}

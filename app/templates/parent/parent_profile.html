@@ -1,0 +1,143 @@
+{% extends "parent/parents_base.html" %}
+
+{% block title %}Profile - CBC-EDU Triad{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header">
+        <h1>Profile</h1>
+    </div>
+    
+    <div class="profile-card">
+        <div class="profile-info">
+            <div class="info-item">
+                <span class="info-label">Full Name:</span>
+                <span class="info-value">Wamish Wamish</span>
+            </div>
+            
+            <div class="info-item">
+                <span class="info-label">Email:</span>
+                <span class="info-value">wamie@example.com</span>
+            </div>
+            
+            <div class="info-item">
+                <span class="info-label">Phone:</span>
+                <span class="info-value">+123 456 7890</span>
+            </div>
+            
+            <div class="info-item">
+                <span class="info-label">Child's Name Below:</span>
+                <span class="info-value">wamilimo</span>
+            </div>
+        </div>
+        
+        <div class="profile-actions">
+            <a href="#" class="edit-button">Edit Profile</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    /* Main container */
+    .profile-container {
+        max-width: 800px;
+        margin: 40px auto;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    /* Profile header */
+    .profile-header {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    
+    .profile-header h1 {
+        color: #2c3e50;
+        font-size: 28px;
+        font-weight: 600;
+        margin: 0;
+    }
+    
+    /* Profile card */
+    .profile-card {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        transition: transform 0.3s ease;
+    }
+    
+    .profile-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    /* Profile information */
+    .profile-info {
+        margin-bottom: 30px;
+    }
+    
+    .info-item {
+        border-bottom: 1px solid #ecf0f1;
+        display: flex;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+    }
+    
+    .info-item:last-child {
+        border-bottom: none;
+    }
+    
+    .info-label {
+        color: #7f8c8d;
+        flex: 0 0 150px;
+        font-weight: 600;
+    }
+    
+    .info-value {
+        color: #2c3e50;
+        flex: 1;
+        font-size: 16px;
+    }
+    
+    /* Profile actions */
+    .profile-actions {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+    
+    .edit-button {
+        background-color: #3498db;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 500;
+        padding: 12px 25px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+    
+    .edit-button:hover {
+        background-color: #2980b9;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+        .profile-card {
+            padding: 20px;
+        }
+        
+        .info-item {
+            flex-direction: column;
+        }
+        
+        .info-label {
+            margin-bottom: 5px;
+        }
+    }
+</style>
+{% endblock %}

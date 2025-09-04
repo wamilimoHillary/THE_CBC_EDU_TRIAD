@@ -1,0 +1,38 @@
+<!-- app/templates/student_login.html -->
+{% extends "base.html" %}
+
+{% block title %}Student Login - CBC-EDU Triad{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/colors.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<main class="student_main">
+    <div class="form-container">
+        <h2>Student Log In</h2>
+        <form action="/student_login" method="post">
+            <div class="input-group">
+                <input type="text" id="student_id" name="student_id" placeholder="Enter your Student ID" required>
+                <label for="student_id">*Student ID</label>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" name="password" placeholder="Enter password (4-8 characters)" required>
+                <label for="password">*Password</label>
+            </div>
+            
+            <button type="submit" class="form-button">
+                Login <i class="fas fa-sign-in-alt"></i> 
+            </button>
+            
+            <a href="{{ url_for('auth.forgot_password') }}" class="forgot-password">
+                <i class="fa fa-key"></i> Forgot password?
+            </a>
+          
+        </form>
+       
+    </div>
+</main>
+{% endblock %}

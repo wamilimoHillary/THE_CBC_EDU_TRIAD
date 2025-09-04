@@ -1,0 +1,172 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Manage Performance Levels - CBC-EDU Triad{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_manage.css') }}">
+{% endblock %}
+
+{% block admin_content %}
+<div class="manage-users">
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+    
+    <h2>Manage Performance Levels</h2>
+    <a href="#" class="btn-add" data-modal="add-level-modal"><i class="fas fa-plus"></i> Add Level</a>
+
+    <table class="users-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Level Name</th>
+                <th>Description</th>
+                <th>Score Value</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for level in performance_levels %}
+            <tr>
+                <td>{{ level[0] }}</td> <!-- PerformanceLevelID -->
+                <td>{{ level[1] }}</td> <!-- LevelName -->
+                <td>{{ level[2] }}</td> <!-- LevelDescription -->
+                <td>{{ level[3] }}</td> <!-- ScoreValue -->
+                <td>
+                    <a href="#" class="btn-edit" data-modal="edit-level-modal" data-level-id="{{ level[0] }}">Edit</a>
+                    <a href="#" class="btn-delete" data-modal="delete-level-modal" data-level-id="{{ level[0] }}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Add Level Modal -->
+    <div id="add-level-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Add Performance Level</h2>
+            <form id="add-level-form" action="{{ url_for('admin.add_performance_level') }}" method="POST" class="auth-form">
+                <div class="input-group">
+                    <input type="text" id="level-name" name="level-name" placeholder=" " required>
+                    <label for="level-name">Level Name</label>
+                </div>
+                <div class="input-group">
+                    <textarea id="level-description" name="level-description" placeholder=" " required></textarea>
+                    <label for="level-description">Description</label>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="score-value" name="score-value" min="0" max="100" placeholder=" " required>
+                    <label for="score-value">Score Value (0-100)</label>
+                </div>
+                <button type="submit" class="form-button"><i class="fas fa-plus"></i> Add Level</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Level Modal -->
+    <div id="edit-level-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Edit Performance Level</h2>
+            <form id="edit-level-form" action="{{ url_for('admin.edit_performance_level') }}" method="POST" class="auth-form">
+                <input type="hidden" id="edit-level-id" name="level_id">
+                <div class="input-group">
+                    <input type="text" id="edit-level-name" name="level-name" placeholder=" " required>
+                    <label for="edit-level-name">Level Name</label>
+                </div>
+                <div class="input-group">
+                    <textarea id="edit-level-description" name="level-description" placeholder=" " required></textarea>
+                    <label for="edit-level-description">Description</label>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="edit-score-value" name="score-value" min="0" max="100" placeholder=" " required>
+                    <label for="edit-score-value">Score Value (0-100)</label>
+                </div>
+                <button type="submit" class="form-button"><i class="fas fa-save"></i> Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Level Modal -->
+    <div id="delete-level-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Delete Performance Level</h2>
+            <p>Are you sure you want to delete this performance level?</p>
+            <form id="delete-level-form" action="{{ url_for('admin.delete_performance_level') }}" method="POST">
+                <input type="hidden" id="delete-level-id" name="level_id">
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel">Cancel</button>
+                    <button type="submit" class="btn-confirm-delete">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="overlay"></div>
+</div>
+
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const overlay = document.getElementById('overlay');
+
+        // Edit buttons
+        const editButtons = document.querySelectorAll('.btn-edit');
+        editButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const modalId = button.getAttribute('data-modal');
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    const levelId = button.getAttribute('data-level-id');
+                    fetchPerformanceLevelDetails(levelId, modal);
+                    modal.style.display = 'block';
+                    overlay.style.display = 'block';
+                }
+            });
+        });
+
+        // Delete buttons
+        const deleteButtons = document.querySelectorAll('.btn-delete');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const modalId = button.getAttribute('data-modal');
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    const levelId = button.getAttribute('data-level-id');
+                    document.getElementById('delete-level-id').value = levelId;
+                    modal.style.display = 'block';
+                    overlay.style.display = 'block';
+                }
+            });
+        });
+
+        // Fetch performance level details
+        function fetchPerformanceLevelDetails(levelId, modal) {
+            fetch(`/admin/get_performance_level/${levelId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        console.error(data.error);
+                        return;
+                    }
+                    document.getElementById('edit-level-id').value = data.PerformanceLevelID;
+                    document.getElementById('edit-level-name').value = data.LevelName;
+                    document.getElementById('edit-level-description').value = data.LevelDescription;
+                    document.getElementById('edit-score-value').value = data.ScoreValue;
+                })
+                .catch(error => console.error('Error fetching performance level details:', error));
+        }
+    });
+</script>
+{% endblock %}

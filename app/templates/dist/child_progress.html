@@ -1,0 +1,56 @@
+{% extends "parents_base.html" %}
+
+{% block title %}Child's Progress - CBC-EDU Triad{% endblock %}
+
+{% block content %}
+<div class="progress-container">
+    <h2>Child's Progress</h2>
+    <div class="progress-cards">
+        <div class="card">
+            <h3>Competency Scores</h3>
+            <p><strong>Science:</strong> 85%</p>
+            <p><strong>Mathematics:</strong> 78%</p>
+            <p><strong>History:</strong> 92%</p>
+        </div>
+        <div class="card">
+            <h3>Completed Projects</h3>
+            <p><strong>Total:</strong> 5</p>
+        </div>
+        <div class="card">
+            <h3>Pending Tasks</h3>
+            <p><strong>Total:</strong> 2</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .progress-container {
+        padding: 20px;
+        background: var(--bg-gradient);
+        color: var(--text-primary);
+    }
+
+    .progress-cards {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .card {
+        background: var(--bg-primary);
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px var(--border-color);
+        flex: 1 1 calc(33.333% - 40px);
+        min-width: 250px;
+        color: var(--text-tertiary);
+    }
+
+    .card h3 {
+        margin-top: 0;
+        color: var(--text-secondary);
+    }
+</style>
+{% endblock %}

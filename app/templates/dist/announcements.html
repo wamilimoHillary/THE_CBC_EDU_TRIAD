@@ -1,0 +1,39 @@
+{% extends "student_base.html" %}
+
+{% block title %}Announcements - CBC-EDU Triad{% endblock %}
+
+{% block content %}
+<div class="announcements-container">
+    <h2>Announcements</h2>
+    <div class="announcement">
+        <h3>Science Fair Registration</h3>
+        <p><strong>Date:</strong> 2023-11-10</p>
+        <p>Register for the annual science fair by November 20th.</p>
+    </div>
+    <div class="announcement">
+        <h3>Parent-Teacher Meeting</h3>
+        <p><strong>Date:</strong> 2023-11-15</p>
+        <p>Join the parent-teacher meeting on November 15th at 10 AM.</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .announcements-container {
+        padding: 20px;
+    }
+
+    .announcement {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        color: #004d4d;
+    }
+</style>
+{% endblock %}
