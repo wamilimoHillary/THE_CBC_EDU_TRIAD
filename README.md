@@ -1,7 +1,7 @@
 CBC EDU TRIAD README
 
 1. Clone the project.
-        https://github.com/wamilimoHillary/cbc_edu_triad modularized
+        https://github.com/wamilimoHillary/THE_CBC_EDU_TRIAD.git
 
 2. Navigate to the project location using your favorite IDE (e.g., VS Code).
 Create your environment file:
